@@ -30,6 +30,9 @@ function getShaderPath(fileName) {
     const isGitHub = host.includes('github.io');
     const repoName = 'color-matching';
 
+    console.log(host);
+    console.log(isGitHub);
+
     if (isGitHub) {
         return `/${repoName}/${fileName}`;
     } else {
@@ -1362,12 +1365,12 @@ async function addObjects(environment) {
     
     // Select which points should be drawn
     environment.matchesDrawn = 0;    
-    environment.drawCount = cube_height*cube_width*cube_depth * (Math.pow(environment.canvas.width/screen.width * 2,2)) + 3200;
+    environment.drawCount = cube_height*cube_width*cube_depth * (Math.pow(environment.canvas.width/screen.width * 2 * screen.width/1920,2)) + 3200;
     environment.object.geometry.setDrawRange(3200, environment.drawCount );
 
     window.addEventListener('resize', () => {
         // note, there are 3603/3 points in the complement spectral band, and 9600/3 in the regular one
-        environment.drawCount = cube_height*cube_width*cube_depth * (Math.pow(environment.canvas.width/screen.width * 2,2)) + 3200;
+        environment.drawCount = cube_height*cube_width*cube_depth * (Math.pow(environment.canvas.width/screen.width * 2 * screen.width/1920,2)) + 3200;
         environment.object.geometry.setDrawRange(3200 - environment.matchesDrawn, environment.drawCount );
         //console.log(environment.matchesDrawn);
     });
