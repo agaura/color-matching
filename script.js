@@ -28,13 +28,13 @@ const environments = {
 function getShaderPath(fileName) {
     const host = window.location.hostname;
     const isGitHub = host.includes('github.io');
-    const repoName = 'color-matching';
 
     console.log(host);
     console.log(isGitHub);
 
     if (isGitHub) {
-        return `/${repoName}/${fileName}`;
+        console.log(`/color-matching/${fileName}`);
+        return `/color-matching/${fileName}`;
     } else {
         return `/${fileName}`;
     }
