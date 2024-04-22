@@ -1291,11 +1291,11 @@ async function addObjects(environment) {
     texture.needsUpdate = true;
 
     // Get shaders
-    const colorShader = await loadShader('../shaders/colors.glsl');
-    const randomShader = await loadShader('../shaders/random.glsl');
-    const placementShader = await loadShader('../shaders/complementCloud/placement.glsl');
-    const vertexShader = await loadShader('../shaders/complementCloud/vertex.glsl');
-    const fragmentShader = await loadShader('../shaders/complementCloud/fragment.glsl');
+    const colorShader = await loadShader('../color-matching/shaders/colors.glsl');
+    const randomShader = await loadShader('../color-matching/shaders/random.glsl');
+    const placementShader = await loadShader('../color-matching/shaders/complementCloud/placement.glsl');
+    const vertexShader = await loadShader('../color-matching/shaders/complementCloud/vertex.glsl');
+    const fragmentShader = await loadShader('../color-matching/shaders/complementCloud/fragment.glsl');
 
     // Create material
     const colorSpaceMaterial = new THREE.ShaderMaterial({
@@ -1504,8 +1504,8 @@ async function initializeColorMatching(environment, canvasName, divName) {
                 value: new THREE.Vector3(0., 0., 0.)
             }
         },
-        '../shaders/colorMatching/vertex.glsl',
-        '../shaders/colorMatching/fragment.glsl');
+        '../color-matching/shaders/colorMatching/vertex.glsl',
+        '../color-matching/shaders/colorMatching/fragment.glsl');
     environment.matchColor = {
         type: "3f",
         value: new THREE.Vector3(0., 0., 0.)
@@ -1545,8 +1545,8 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
             scale: {value: 2.1230881684358494},
             spectrum: {value: environment.spectrum}
         },
-        '../shaders/visualSpectrum/vertex.glsl',
-        '../shaders/visualSpectrum/fragment.glsl');
+        '../color-matching/shaders/visualSpectrum/vertex.glsl',
+        '../color-matching/shaders/visualSpectrum/fragment.glsl');
 
     drawAxis(); // Add axis
     window.addEventListener('resize', drawAxis); // Redraw the axis on window resize
