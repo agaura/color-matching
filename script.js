@@ -1,7 +1,7 @@
 // script.js
 import * as THREE from 'three';
-import { setupMotion } from './color-matching/motion.js';
-import { initializeSliders } from './color-matching/sliders.js';
+import { setupMotion } from './motion.js';
+import { initializeSliders } from './sliders.js';
 import { EffectComposer } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/RenderPass';
 import { ShaderPass } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/ShaderPass';
