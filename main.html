@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Color Introduction: Additive Spaces from the Ground Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.162.0/build/three.module.js"
+      }
+    }
+</script>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://unpkg.com/d3-simple-slider"></script>
+<body>
+    <div id="container">
+        <div id="top-area">
+            <div id="left-column">
+                <div id="top-left"></div>
+                <div id="bottom-left">
+                    <div id="chart-container">
+                        <div id="blank-chart"></div>
+                        <svg id="axis-svg"></svg>
+                    </div>
+                    <div id="colorMatchingContainer">
+                        <div id="colorMatchingDiv"></div>
+                    </div>
+                    <div id="sliders"></div>
+                    <div id="matchBtnDiv">
+                        <button id="matchBtn">Confirm Match</button>
+                    </div>
+                </div>
+            </div>
+            <div id="right-column">
+                <div id="complementCloudDiv"></div>
+            </div>
+        </div>
+        <div id="bottom-div">
+            <div id="navigation">
+                <button id="prev">Back</button>
+                <button id="next">Next</button>
+            </div>
+        </div>
+    </div>
+    <canvas id="complementCloud" onmouseover="this.style.cursor='pointer';"></canvas>
+    <canvas id="colorMatching"></canvas>
+    <canvas id="visualSpectrum" onmouseover="this.style.cursor='pointer';"></canvas>
+    <!-- <video width = "10" height = "10" poster="white.b07b762e.png" preload autoplay loop muted controls class="h-1 w-full" title="HDR Video" id="hdr-video"> -->
+    <!-- <video poster="white.b07b762e.png" preload autoplay loop muted controls class="h-1 w-full" title="HDR Video" id="hdr-video">
+        <source src="https://kidi.ng/wanna-see-a-whiter-white/white1.6805bac8.webm" type="video/webm">
+        <source src="https://kidi.ng/wanna-see-a-whiter-white/white1.52879896.mp4" type="video/mp4">
+        <source src="https://kidi.ng/wanna-see-a-whiter-white/white2.ec8e015a.mp4" type="video/mp4">
+    </video> -->
+    <script src="https://threejs.org/build/three.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+/* style.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #111111;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#top-area {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 5%);
+}
+
+#navigation {
+    height: 5%;
+    text-align: center;
+}
+
+#left-column {
+    display: flex;
+    flex-direction: column;
+    width: 50%; /* Adjust if you want different column widths */
+    flex-grow: 2;
+}
+
+#right-column {
+    flex-grow: 1;
+    display: grid;
+    place-items: center;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#complementCloudDiv {
+    /* Use the min() function to select the smaller value between the viewport width and height */
+    width: min(50vw, 95vh);
+    height: min(50vw, 95vh);
+    aspect-ratio: 1 / 1;
+}
+
+#top-left {
+    flex-grow: 1;
+    height: 30%;
+    color: white;
+    /*font-family: 'Courier', monospace;*/
+}
+
+#bottom-left {
+    flex-grow: 1;
+    height: 70%;
+    color: white;
+    /*font-family: 'Courier', monospace;*/
+}
+
+#sliders {
+    text-align: center;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*filter: brightness(1.36);*/
+    /*filter: blur(1px);*/
+    /*image-rendering: pixelated;*/
+}
+
+button {
+    margin: 0 10px;
+}
+
+.track,
+.track-inset,
+.track-overlay {
+    stroke-width: 1px; /* Adjust the line width */
+    stroke: #aaa;
+}
+
+.track-fill {
+    stroke-width: 3px; /* Adjust the line width */
+    /*stroke: color(display-p3 1 0 0);*/
+
+}
+
+.slider-handle {
+    fill: black; /* Initial circle color */
+}
+
+#colorMatchingContainer {
+    margin-left: 8%; /* Adjust the left margin as needed */
+    margin-right: 8%; /* Adjust the right margin as needed */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: calc(100% - 20%); /* Adjust based on total left and right margins */
+}
+
+#colorMatchingDiv {
+    width: 100%; /* Fill the width of the container */
+    aspect-ratio: 6 / 1; /* Width is 4 times the height */
+}
+
+#matchBtnDiv {
+    text-align: center;
+}
+
+#chart-container {
+    width: 100%; /* This makes the width responsive */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    position: relative; /* Added if you need absolute positioning within the container */
+}
+
+#blank-chart {
+    width: calc(100% - 40px);
+    padding-top: 12.5%; /* Establish an 8:1 aspect ratio */
+    margin-left: auto; /* Centers the div within chart-container */
+    margin-right: auto; /* Centers the div within chart-container */
+}
+
+#axis-svg {
+    width: 100%;
+    height: 20px; /* Fixed height for the axis */
+    display: block; /* Ensure the SVG fills the width */
+}
+
+#hdr-video {
+    position: fixed; /* Use fixed or absolute positioning */
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 100;
+    background-size: cover;
+    overflow: hidden;
+    pointer-events: none; /* Disables mouse interactions */
+    filter: opacity(0%);
+}
