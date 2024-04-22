@@ -83,7 +83,7 @@ void place_RGB1931_cloud() {
         xyz_color = new_position;
 
         new_position = XYZ_to_RGB1931*new_position;
-        gl_PointSize = 2.;
+        gl_PointSize = 20.*(sin(time/500.)/2.+0.5);
 
         unaffected = float(true);
     }

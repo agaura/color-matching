@@ -56,6 +56,10 @@ body, html {
     flex-grow: 1;
     height: 30%;
     color: white;
+    margin-left: 4%; /* Adjust the left margin as needed */
+    margin-right: 4%; /* Adjust the right margin as needed */
+    margin-top: 20px;
+    margin-bottom: 20px;
     /*font-family: 'Courier', monospace;*/
 }
 
