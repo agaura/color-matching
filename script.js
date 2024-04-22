@@ -1,7 +1,7 @@
 // script.js
 import * as THREE from 'three';
-import { setupMotion } from './motion.js';
-import { initializeSliders } from './sliders.js';
+import { setupMotion } from './color-matching/motion.js';
+import { initializeSliders } from './color-matching/sliders.js';
 import { EffectComposer } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/RenderPass';
 import { ShaderPass } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/ShaderPass';
@@ -1534,7 +1534,7 @@ function drawAxis() {
 
 async function initializeVisualSpectrum(environment, canvasName, divName) {
     initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
-    environment.spectrum = await loadVisualSpectrum('../lin2012xyz2e_fine_7sf.csv');
+    environment.spectrum = await loadVisualSpectrum('../color-matching/lin2012xyz2e_fine_7sf.csv');
 
     await addShaderOverlay(environment, 
         {
