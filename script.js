@@ -25,7 +25,7 @@ const environments = {
     visualSpectrum: {}
 }
 
-function getShaderPath(fileName) {
+function getPath(fileName) {
     const host = window.location.hostname;
     const isGitHub = host.includes('github.io');
 
@@ -34,14 +34,14 @@ function getShaderPath(fileName) {
 
     if (isGitHub) {
         console.log(`/color-matching/${fileName}`);
-        return `/color-matching/${fileName}`;
+        return `../color-matching/${fileName}`;
     } else {
-        return `/${fileName}`;
+        return `../${fileName}`;
     }
 }
 
 async function loadShader(url) {
-    const response = await fetch(getShaderPath(url));
+    const response = await fetch(getPath(url));
     if (!response.ok) {
         throw new Error(`Failed to load shader: ${url}`);
     }
@@ -1306,11 +1306,11 @@ async function addObjects(environment) {
     texture.needsUpdate = true;
 
     // Get shaders
-    const colorShader = await loadShader('../shaders/colors.glsl');
-    const randomShader = await loadShader('../shaders/random.glsl');
-    const placementShader = await loadShader('../shaders/complementCloud/placement.glsl');
-    const vertexShader = await loadShader('../shaders/complementCloud/vertex.glsl');
-    const fragmentShader = await loadShader('../shaders/complementCloud/fragment.glsl');
+    const colorShader = await loadShader('shaders/colors.glsl');
+    const randomShader = await loadShader('shaders/random.glsl');
+    const placementShader = await loadShader('shaders/complementCloud/placement.glsl');
+    const vertexShader = await loadShader('shaders/complementCloud/vertex.glsl');
+    const fragmentShader = await loadShader('shaders/complementCloud/fragment.glsl');
 
     // Create material
     const colorSpaceMaterial = new THREE.ShaderMaterial({
@@ -1519,8 +1519,8 @@ async function initializeColorMatching(environment, canvasName, divName) {
                 value: new THREE.Vector3(0., 0., 0.)
             }
         },
-        '../shaders/colorMatching/vertex.glsl',
-        '../shaders/colorMatching/fragment.glsl');
+        'shaders/colorMatching/vertex.glsl',
+        'shaders/colorMatching/fragment.glsl');
     environment.matchColor = {
         type: "3f",
         value: new THREE.Vector3(0., 0., 0.)
@@ -1549,7 +1549,7 @@ function drawAxis() {
 
 async function initializeVisualSpectrum(environment, canvasName, divName) {
     initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
-    environment.spectrum = await loadVisualSpectrum('../lin2012xyz2e_fine_7sf.csv');
+    environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
 
     await addShaderOverlay(environment, 
         {
@@ -1560,8 +1560,8 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
             scale: {value: 2.1230881684358494},
             spectrum: {value: environment.spectrum}
         },
-        '../shaders/visualSpectrum/vertex.glsl',
-        '../shaders/visualSpectrum/fragment.glsl');
+        getPath('shaders/visualSpectrum/vertex.glsl'),
+        getPath('shaders/visualSpectrum/fragment.glsl'));
 
     drawAxis(); // Add axis
     window.addEventListener('resize', drawAxis); // Redraw the axis on window resize
