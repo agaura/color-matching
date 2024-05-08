@@ -1337,9 +1337,9 @@ async function addObjects(environment) {
     const cube_width = size;
     const cube_depth = size;
 
-    for (let i = 0; i < cube_height; i += 1){
-        for (let j = 0; j < cube_width; j += 1) {
-            for (let k = 0; k < cube_depth; k += 1) {
+    for (let i = 0; i < cube_height; i++){
+        for (let j = 0; j < cube_width; j++) {
+            for (let k = 0; k < cube_depth; k++) {
                 
                 const x = size * Math.random() / (cube_height / cubes);
                 const y = - size * Math.random() / (cube_width); // negative to make it easy to differentiate from spectral values in shader
@@ -1446,7 +1446,7 @@ function checkMatch(spectrum, matchEnvironment, cloudEnvironment) {
 
     if (convertedMatchColor.distanceTo(attemptColor) < 0.1) {
 
-        cloudEnvironment.matchesDrawn += 1;
+        cloudEnvironment.matchesDrawn++;
 
         var index = 3603/3 - cloudEnvironment.matchesDrawn;
         cloudEnvironment.object.geometry.attributes.position.needsUpdate = true;
@@ -1459,6 +1459,10 @@ function checkMatch(spectrum, matchEnvironment, cloudEnvironment) {
         matchColor.setX(spectrum.image.data[i]);
         matchColor.setY(spectrum.image.data[i+1]);
         matchColor.setZ(spectrum.image.data[i+2]);
+
+        matchEnvironment.matchColor.value.setX(spectrum.image.data[i]);
+        matchEnvironment.matchColor.value.setY(spectrum.image.data[i+1]);
+        matchEnvironment.matchColor.value.setZ(spectrum.image.data[i+2]);
     }
 
     //fillSpectrum(spectrum, cloudEnvironment);
@@ -1617,7 +1621,7 @@ function setupNavigation() {
     // Setup event listeners for your navigation buttons.
 
     document.getElementById('next').addEventListener('click', () => {
-        environments.complementCloud.object.material.uniforms.mode.value += 1;
+        environments.complementCloud.object.material.uniforms.mode.value ++;
         if (environments.complementCloud.object.material.uniforms.mode.value == 1) {
             fillSpectrum(environments.visualSpectrum.composer.passes[1].uniforms.spectrum.value, environments.complementCloud);
         }
