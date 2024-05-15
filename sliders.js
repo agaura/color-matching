@@ -1,4 +1,4 @@
-import {CSSconvert} from './colors.js';
+import {displayableProjection} from './colors.js';
 
 function initializeSlider(svg, height, min, max, widthAdj, heightAdj, primary, a, g, change) {
     const slider = svg.append('g')
@@ -11,19 +11,19 @@ function initializeSlider(svg, height, min, max, widthAdj, heightAdj, primary, a
             .ticks(4)
             .tickFormat(d3.format('.1f'))
             .default(0.)
-            .fill(CSSconvert(0, primary, a, g))
+            .fill(displayableProjection(0, primary, a, g))
             .handle(d3.symbol()
                 .type(d3.symbolCircle)
                 .size(150)
             )
             .on('onchange', val => {
-                slider.select('.handle').attr('fill', CSSconvert(val, primary, a, g));
-                slider.select('.parameter-value').attr('stroke', CSSconvert(val, primary, a, g));
-                slider.select('.track-fill').attr('stroke', CSSconvert(val, primary, a, g));
+                slider.select('.handle').attr('fill', displayableProjection(val, primary, a, g));
+                slider.select('.parameter-value').attr('stroke', displayableProjection(val, primary, a, g));
+                slider.select('.track-fill').attr('stroke', displayableProjection(val, primary, a, g));
                 change(val);
             }));
-    slider.select('.handle').attr('fill', CSSconvert(0, primary, a, g));
-    slider.select('.parameter-value').attr('stroke', CSSconvert(0, primary, a, g));
+    slider.select('.handle').attr('fill', displayableProjection(0, primary, a, g));
+    slider.select('.parameter-value').attr('stroke', displayableProjection(0, primary, a, g));
 }
 
 function fixTicks(svg) {

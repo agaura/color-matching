@@ -1,5 +1,6 @@
 // script.js
 import * as THREE from 'three';
+import { getPath, loadShader } from './utils.js';
 import { setupMotion } from './motion.js';
 import { initializeSliders } from './sliders.js';
 import { EffectComposer } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/EffectComposer';
@@ -20,32 +21,9 @@ const objects = {
 };
 
 const environments = {
-    complementCloud: {motionComponents: {momentum: false}},
+    complementCloud: {},
     colorMatching: {},
     visualSpectrum: {}
-}
-
-function getPath(fileName) {
-    const host = window.location.hostname;
-    const isGitHub = host.includes('github.io');
-
-    console.log(host);
-    console.log(isGitHub);
-
-    if (isGitHub) {
-        console.log(`/color-matching/${fileName}`);
-        return `../color-matching/${fileName}`;
-    } else {
-        return `../${fileName}`;
-    }
-}
-
-async function loadShader(url) {
-    const response = await fetch(getPath(url));
-    if (!response.ok) {
-        throw new Error(`Failed to load shader: ${url}`);
-    }
-    return response.text();
 }
 
 async function initEnvironment(environment, canvasElement, container) {
@@ -1589,7 +1567,7 @@ function animate(time) {
     if (environments.complementCloud.object) {
         environments.complementCloud.object.material.uniforms.time.value = time;
     }
-    if (environments.complementCloud.motionComponents.momentum) {environments.complementCloud.updateRotation();}
+    if (environments.complementCloud.motion) {environments.complementCloud.motion.selfMove();}
         
     // Render the scene
     environments.complementCloud.renderer.render(environments.complementCloud.scene, environments.complementCloud.camera);

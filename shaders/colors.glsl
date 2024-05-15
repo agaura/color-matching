@@ -77,14 +77,18 @@ vec3 circleFade(float outerR, float innerR, vec3 dist, float p) {
     return pow(clamp((1./(outerR-innerR)) * (outerR - dist),0.,1.),vec3(p));
 }
 
+bool alphaCondition(float a, float b) {
+    return ((a <= b) && (a >= 0.)) || ((a >= b) && (a <= 0.));
+}
+
 vec3 getAlphas(vec3 ref, vec3 ideal) {
 
     vec3 dist = vec3(0.);
-    if (ref.r <= ideal.r) {dist.r = distance(ref.gb, ideal.gb);}
+    if (alphaCondition(ref.r, ideal.r)) {dist.r = distance(ref.gb, ideal.gb);}
     else {dist.r = distance(ref, ideal);}
-    if (ref.g <= ideal.g) {dist.g = distance(ref.rb, ideal.rb);}
+    if (alphaCondition(ref.g, ideal.g)) {dist.g = distance(ref.rb, ideal.rb);}
     else {dist.g = distance(ref, ideal);}
-    if (ref.b <= ideal.b) {dist.b = distance(ref.rg, ideal.rg);}
+    if (alphaCondition(ref.b, ideal.b)) {dist.b = distance(ref.rg, ideal.rg);}
     else {dist.b = distance(ref, ideal);}
 
     float widthScale = 10.;

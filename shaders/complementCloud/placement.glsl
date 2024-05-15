@@ -27,7 +27,7 @@ vec3 cubic_cloud_distribute(vec3 pos, float time) {
     float strength = 1./16.;
     float r = stable_randomizer(pos);
     bool edge = false;
-    if (r < 0.25) {
+    if (r < 0.5) {
         strength = 1.;
         edge = true;
     }
