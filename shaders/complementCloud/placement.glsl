@@ -16,7 +16,7 @@ vec3 push_into_displayable_XYZ_cloud(sampler2D spectrum, vec3 distribution) {
     vec3 v = texture(spectrum, vec2(distribution.x, 0.5)).rgb;
 
     // this one I think is actually prettier when you remove the belt
-    vec3 new_coord = mix(v, vec3(distribution.y), pow(distribution.z,2.));
+    vec3 new_coord = mix(v, vec3(distribution.y), pow(distribution.z,1.));
 
     return new_coord;
 }
@@ -27,7 +27,7 @@ vec3 cubic_cloud_distribute(vec3 pos, float time) {
     float strength = 1./16.;
     float r = stable_randomizer(pos);
     bool edge = false;
-    if (r < 0.5) {
+    if (r < .5) {
         strength = 1.;
         edge = true;
     }
@@ -45,13 +45,13 @@ vec3 cubic_cloud_distribute2(vec3 pos, float time) {
     float strength = 1./16.;
     float r = stable_randomizer(pos);
     bool edge = false;
-    if (r < 0.25) {
+    if (r < 0.5) {
         strength = 1.;
         edge = true;
     }
 
     // actual placement
-    vec3 new_point = randomizer2(pos, time, edge);
+    vec3 new_point = randomizer(pos, time, edge);
     return mod(vec3(stable_randomizer(pos),0.,0.) + mix(pos.xyz, new_point, strength), 1.);
 
     /*
