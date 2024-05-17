@@ -12,7 +12,10 @@ void paint_complement_cloud() {
     vec3 gray = vec3(0.3277935806611292);
 
     vec3 linearResult = mix(gray, p3_color, alpha);
-    if (clamp(p3_color/whitepoint_scale,0.,1.) == p3_color/whitepoint_scale) {
+    bool cubeVisible = (mode == 7) ||
+        (mode == 8) ||
+        (mode == 9);
+    if ((clamp(p3_color/whitepoint_scale,0.,1.) == p3_color/whitepoint_scale) && cubeVisible) {
         linearResult = p3_color/whitepoint_scale;
     }
 
@@ -44,7 +47,15 @@ void main() {
     switch (mode) {
         case 0:
         case 1: paint_RGB1931_cloud(); break;
-        case 2: paint_complement_cloud(); break;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9: paint_complement_cloud(); break;
+        case 10: paint_RGB1931_cloud(); break;
     }
 
 }

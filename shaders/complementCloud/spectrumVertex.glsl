@@ -14,8 +14,8 @@ void place_complement_cloud() {
 
     xyz_color /= 2.1230881684358494;
 
-    vec4 correctedPosition = vec4(position_xyz(XYZ_to_RGB1931*xyz_color,0.62), 1.0);
-    //vec4 correctedPosition = vec4(position_xyz(xyz_color, 1.0), 0.9);
+    vec4 correctedPosition = vec4(properly_position(XYZ_to_RGB1931*xyz_color,0.62), 1.0);
+    //vec4 correctedPosition = vec4(properly_position(xyz_color, 1.0), 0.9);
     gl_Position = projectionMatrix * modelViewMatrix * correctedPosition;
 
 }
@@ -35,7 +35,7 @@ void place_RGB1931_cloud() {
 
     unaffected = float(true);
 
-    vec4 correctedPosition = vec4(position_xyz(new_position,0.95), 1.0);
+    vec4 correctedPosition = vec4(properly_position(new_position,0.95), 1.0);
     gl_Position = projectionMatrix * modelViewMatrix * correctedPosition;
 
 }
@@ -58,7 +58,7 @@ void full_spectrum() {
 
     unaffected = float(true);
 
-    vec4 correctedPosition = vec4(position_xyz(new_position,0.95), 1.0);
+    vec4 correctedPosition = vec4(properly_position(new_position,0.95), 1.0);
     gl_Position = projectionMatrix * modelViewMatrix * correctedPosition;
 
 }
@@ -66,9 +66,17 @@ void full_spectrum() {
 void main() {
 
     switch (mode) {
-        case 0: place_RGB1931_cloud(); break;
-        case 1: full_spectrum(); break;
-        case 2: place_complement_cloud(); break;
+        case 0:
+        case 1: place_RGB1931_cloud(); break;
+        case 2: 
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9: place_complement_cloud(); break;
+        case 10: full_spectrum(); break;
         //case 1: place_complement_cloud(); break;
     }
 }

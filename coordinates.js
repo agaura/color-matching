@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 // XYZ coordinates of complement spectrum, generated from python
 export const lookupTable = [0.203955,0.022454,0.999443,
     0.200203,0.021067,0.999448,
@@ -1201,3 +1203,21 @@ export const lookupTable = [0.203955,0.022454,0.999443,
     0.209558,0.024597,0.999435,
     0.205822,0.023168,0.999440
 ];
+
+export function getComplementSpectrum() {
+
+    const width = lookupTable.length/3;
+    const data = new Float32Array(width*4);
+    for (let i = 0; i < width; i++) {
+        data[4*i] = lookupTable[3*i] * 1;
+        data[4*i+1] = lookupTable[3*i+1] * 1;
+        data[4*i+2] = lookupTable[3*i+2] * 1;
+        data[4*i+3] = 1;
+    }
+
+    const texture = new THREE.DataTexture(data, width, 1, THREE.RGBAFormat, THREE.FloatType);
+    texture.magFilter = THREE.LinearFilter; // this allows linear interpolation
+    texture.needsUpdate = true;
+
+    return texture;
+}

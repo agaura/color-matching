@@ -1,4 +1,4 @@
-vec3 position_xyz(vec3 coord, float scale) {
+vec3 properly_position(vec3 coord, float scale) {
     vec3 chromaticity_coord = coord/(coord.x+coord.y+coord.z);
     chromaticity_coord.z = 0.;
     vec3 placement = 1.5*(rotateX(M_PI/2.)*rotateZ(0.304*M_PI)*rotateX(M_PI/4.)*scale*coord).zxy-vec3(0.,1.3*scale,.0);
@@ -8,6 +8,14 @@ vec3 position_xyz(vec3 coord, float scale) {
     float chromaticity_scale = 2.5*scale;
     vec3 chromaticity_placement = (rotateY(M_PI/2.)*rotateX(M_PI/2.)*(chromaticity_scale)*(chromaticity_coord)).zxy-vec3(.33*chromaticity_scale,.33*chromaticity_scale,0.);
     return chromaticity_placement;*/
+}
+
+vec3 properly_position_chromaticity(vec3 coord, float scale) {
+    vec3 chromaticity_coord = coord/(coord.x+coord.y+coord.z);
+    chromaticity_coord.z = 0.;
+    float chromaticity_scale = 2.5*scale;
+    vec3 chromaticity_placement = (rotateY(M_PI/2.)*rotateX(M_PI/2.)*(chromaticity_scale)*(chromaticity_coord)).zxy-vec3(.33*chromaticity_scale,.33*chromaticity_scale,0.);
+    return chromaticity_placement;
 }
 
 vec3 push_into_displayable_XYZ_cloud(sampler2D spectrum, vec3 distribution) {
@@ -27,7 +35,7 @@ vec3 cubic_cloud_distribute(vec3 pos, float time) {
     float strength = 1./16.;
     float r = stable_randomizer(pos);
     bool edge = false;
-    if (r < .5) {
+    if (r < 0.5) {
         strength = 1.;
         edge = true;
     }

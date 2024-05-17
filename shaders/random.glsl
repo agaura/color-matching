@@ -18,9 +18,9 @@ vec3 randomizer(vec3 starter, float time, bool edge) {
     float speedVariance2 = mix(1.,speedMultiplier,r3);
     float speedVariance3 = mix(1.,speedMultiplier,r1);
 
-    float p1 = ((1.0 - r1) / 2. + r1 * sin(speedVariance1 * time * speed / 10. + 150.*r1p) + 1.0) / 2.;
-    float p2 = ((1.0 - r2) / 2. + r2 * sin(speedVariance2 * time * speed + 276.*r2p) + 1.0) / 2.;
-    float p3 = ((1.0 - r3) / 2. + r3 * sin(speedVariance3 * time * speed + 2039.*r3p) + 1.0) / 2.;
+    float p1 = (r1 * sin(speedVariance1 * time * speed / 10. + 150.*r1p) + 1.0) / 2.;
+    float p2 = (r2 * sin(speedVariance2 * time * speed + 276.*r2p) + 1.0) / 2.;
+    float p3 = (r3 * sin(speedVariance3 * time * speed + 2039.*r3p) + 1.0) / 2.;
 
     // these points slowly draw big circles/swirls around the figure,
     // as they are sinusoidal they are a bit more likely to spend time
