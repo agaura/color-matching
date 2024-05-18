@@ -40,26 +40,36 @@ mat3 RGB1931toXYZ = transpose(mat3(0.49,0.31,0.2,
         0.17697,0.8124,0.01063,
         0.0,0.01,0.99));
 
+vec2 circlePlace(float r, float theta) {
+    return r*vec2(sin(theta), cos(theta));
+}
+
 void main() {
+
+    bool REALISTIC = false;
+    float M_PI = 3.1415926535897932384626433832795;
+
     vec4 color = texture2D(tDiffuse, vUv);
     vec2 pos = vUv;
-    float aspectRatio = 6.;
+    float aspectRatio = 8.;
     pos.x *= aspectRatio;
 
-    vec3 baseGray = mix(vec3(gray), vec3(0.), alpha);
+    float negativeRed = sliderColor.r > 0. ? 0. : -1. * sliderColor.r;
+    vec3 p3negativeRed = XYZ_to_p3*RGB1931toXYZ*vec3(negativeRed,0.,0.);
+    vec3 background = REALISTIC ? mix(vec3(gray), p3negativeRed, alpha) : mix(vec3(gray), vec3(0.), alpha);
 
-    vec3 redComponent = mix(vec3(gray), XYZ_to_p3*RGB1931toXYZ*vec3(1.,0.,0.), alpha) - baseGray;
-    vec3 greenComponent = mix(vec3(gray), XYZ_to_p3*RGB1931toXYZ*vec3(0.,1.,0.), alpha) - baseGray;
-    vec3 blueComponent = mix(vec3(gray), XYZ_to_p3*RGB1931toXYZ*vec3(0.,0.,1.), alpha) - baseGray;
+    vec3 redComponent = alpha*XYZ_to_p3*RGB1931toXYZ*vec3(1.,0.,0.);
+    vec3 greenComponent = alpha*XYZ_to_p3*RGB1931toXYZ*vec3(0.,1.,0.);
+    vec3 blueComponent = alpha*XYZ_to_p3*RGB1931toXYZ*vec3(0.,0.,1.);
 
     float outerRadius = 0.35;
     float innerRadius = 0.25;
     float circDist = outerRadius / 2.;
     float circHeight = sqrt(circDist*circDist/2.);
-    vec2 circPos = vec2(1.5,0.5 - circHeight/2.);
-    vec2 redPoint = circPos + vec2(0.,0.);
-    vec2 greenPoint = circPos + vec2(circDist,0.);
-    vec2 bluePoint = circPos + vec2(circDist/2.,circHeight);
+    vec2 circPos = vec2(2.75,0.5);
+    vec2 redPoint = circPos + (sin(time/1600.)) * circlePlace(1.5*circDist/2., time/500.);
+    vec2 greenPoint = circPos + (sin(time/1600.)) * circlePlace(1.5*circDist/2., time/500. + 2.*M_PI/3.);
+    vec2 bluePoint = circPos + (sin(time/1600.)) * circlePlace(1.5*circDist/2., time/500. + 4.*M_PI/3.);
 
     vec3 sliderMultiplier = vec3(
         circleFade(outerRadius, innerRadius, distance(pos, redPoint),1.) * sliderColor.r,
@@ -67,17 +77,17 @@ void main() {
         circleFade(outerRadius, innerRadius, distance(pos, bluePoint),1.) * sliderColor.b
     );
 
-    vec2 matchPos = vec2(4.5,0.5);
-    float matchMultiplier = circleFade(outerRadius, innerRadius, distance(pos, matchPos),1.);
-    vec3 matchComponent = mix(vec3(gray), XYZ_to_p3*matchColor/scale, alpha) - baseGray;
-
-    vec2 potentialPos = vec2(3.5,0.5);
+    vec2 potentialPos = vec2(4.,0.5);
     float potentialMultiplier = circleFade(outerRadius, innerRadius, distance(pos, potentialPos),1.);
-    vec3 potentialComponent = mix(vec3(gray), XYZ_to_p3*RGB1931toXYZ*sliderColor, alpha) - baseGray;
+    vec3 potentialComponent = alpha*XYZ_to_p3*RGB1931toXYZ*sliderColor;
+
+    vec2 matchPos = vec2(5.25,0.5);
+    float matchMultiplier = circleFade(outerRadius, innerRadius, distance(pos, matchPos),1.);
+    vec3 matchComponent = alpha*XYZ_to_p3*matchColor/scale;
 
     float edgeFade = circleFade(0.,0.25, min(distance(pos.x, 0.), distance(pos.x, aspectRatio)),4.);
 
-    vec3 finalColor = srgb_transfer_function(vec3(baseGray
+    vec3 finalColor = srgb_transfer_function(vec3(background
         + sliderMultiplier.r * redComponent
         + sliderMultiplier.g * greenComponent
         + sliderMultiplier.b * blueComponent
@@ -85,4 +95,20 @@ void main() {
         + potentialMultiplier * potentialComponent));
 
     gl_FragColor = edgeFade*vec4(finalColor, 1.);
+
+    float rotatingBox = 2.25;
+    float combiningBox = 3.5;
+    float matchingBox = 4.75;
+    if ((pos.x > rotatingBox) && (pos.x < rotatingBox+1.)) {
+        gl_FragColor = edgeFade*vec4(finalColor, 1.);
+
+        //vec3 backgroundColor = 
+    }
+    else if ((pos.x > combiningBox) && (pos.x < combiningBox+1.)) {
+        gl_FragColor = edgeFade*vec4(finalColor, 1.);
+    }
+    else if ((pos.x > matchingBox) && (pos.x < matchingBox+1.)) {
+        gl_FragColor = edgeFade*vec4(finalColor, 1.);
+    }
+    else {gl_FragColor = vec4(0.);}
 }

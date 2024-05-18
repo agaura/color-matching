@@ -107,16 +107,16 @@ button {
 }
 
 #colorMatchingContainer {
-    margin-left: 8%; /* Adjust the left margin as needed */
-    margin-right: 8%; /* Adjust the right margin as needed */
+    /*margin-left: 8%; /* Adjust the left margin as needed */
+    /*margin-right: 8%; /* Adjust the right margin as needed */
     margin-top: 10px;
     margin-bottom: 10px;
-    width: calc(100% - 20%); /* Adjust based on total left and right margins */
+    /*width: calc(100% - 20%); /* Adjust based on total left and right margins */
 }
 
 #colorMatchingDiv {
     width: 100%; /* Fill the width of the container */
-    aspect-ratio: 6 / 1; /* Width is 4 times the height */
+    aspect-ratio: 8 / 1; /* Width is 4 times the height */
 }
 
 #matchBtnDiv {
