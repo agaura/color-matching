@@ -37,6 +37,24 @@ export class ComplementCloud {
         this.enableResize(document.getElementById(divName));
     }
 
+    setIdealX(val) {
+        this.outerCloud.material.uniforms.ideal.value.setX(val);
+        this.P3Cloud.material.uniforms.ideal.value.setX(val);
+        this.sRGBCloud.material.uniforms.ideal.value.setX(val);
+    }
+
+    setIdealY(val) {
+        this.outerCloud.material.uniforms.ideal.value.setY(val);
+        this.P3Cloud.material.uniforms.ideal.value.setY(val);
+        this.sRGBCloud.material.uniforms.ideal.value.setY(val);
+    }
+
+    setIdealZ(val) {
+        this.outerCloud.material.uniforms.ideal.value.setZ(val);
+        this.P3Cloud.material.uniforms.ideal.value.setZ(val);
+        this.sRGBCloud.material.uniforms.ideal.value.setZ(val);
+    }
+
     async fillSpectrum() {
 
         this.matchesDrawn = 9600/3;
@@ -148,6 +166,7 @@ export class ComplementCloud {
         this.sRGBCloud.geometry.setDrawRange(0, drawCount );
 
         // these clouds should start off invisible
+        //this.outerCloud.visible = false;
         this.P3Cloud.visible = false;
         this.sRGBCloud.visible = false;
         

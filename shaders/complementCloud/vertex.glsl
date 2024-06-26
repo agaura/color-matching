@@ -67,24 +67,43 @@ void place_complement_cloud() {
 
 }
 
+vec3 sphere_distribute(vec3 pos) {
+    //float r = pow(pos.x, pow(pos.x,0.5));
+    //float r = 2.*pow((pow(pos.x, pow(pos.x,1.)) - 0.69225+0.0001*(sin(time/500.)/2.+0.5)),.25);
+    float r = 1.9*pow(pos.x,1./3.);
+    float phi = acos(2. * pos.y - 1.);
+    float theta = 2. * M_PI * pos.z;
+    return vec3(r * sin(phi) * cos(theta),
+        r * sin(phi) * sin(theta),
+        r * cos(phi));
+}
+
 void place_RGB1931_cloud() {
 
     vec3 new_position = position;
 
-    if (cloudID != 0) {new_position *= 0.;}
+    //if (cloudID != 0) {new_position *= 0.;}
 
     new_position = cubic_cloud_distribute(new_position, time);
     new_position = vec3(rebound(new_position.x, -0.493152501716165, 2.1230881684358494),
         rebound(new_position.y, 0.0, 1.2081507310237678),
         rebound(new_position.z, 0.0, 1.9537069391779407)) / 2.1230881684358494;
+
+    //new_position = new_position + 1000.*vec3(0.,0.,position.z);
+    //new_position.y = mod(new_position.y + position.y * 1000., 1.);
+    //new_position = 1.13*sphere_distribute(new_position);
     
     xyz_color = RGB1931_to_XYZ*new_position;
 
-    gl_PointSize = max(1.,pow(length(getAlphas(XYZ_to_RGB1931*xyz_color, ideal)),2.5)*10.);
+    vec3 alphas = getAlphas(XYZ_to_RGB1931*xyz_color, ideal);
+    gl_PointSize = max(1.,pow(length(oldGetAlphas(XYZ_to_RGB1931*xyz_color, ideal)),2.5)*10.);
+    //gl_PointSize = max(1.,pow(length(getAlphas(XYZ_to_RGB1931*xyz_color, ideal)),2.5)*10.);
+    //gl_PointSize = max(1.,pow(max(alphas.x, max(alphas.y, alphas.z)),2.)*10.);
 
     unaffected = float(false);
 
-    vec4 correctedPosition = vec4(properly_position(new_position,0.95), 1.0);
+    vec4 correctedPosition = vec4(properly_position(new_position,1.), 1.0);
+    //vec4 correctedPosition = vec4(properly_position_matching(new_position,1.), 1.0);
     gl_Position = projectionMatrix * modelViewMatrix * correctedPosition;
 
 }

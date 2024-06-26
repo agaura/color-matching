@@ -10,6 +10,18 @@ vec3 properly_position(vec3 coord, float scale) {
     return chromaticity_placement;*/
 }
 
+vec3 properly_position_matching(vec3 coord, float scale) {
+    vec3 chromaticity_coord = coord/(coord.x+coord.y+coord.z);
+    chromaticity_coord.z = 0.;
+    vec3 placement = 1.*(rotateX(M_PI/2.)*rotateZ(0.304*M_PI)*rotateX(M_PI/4.)*scale*coord).zxy-vec3(0.,0.,.0);
+    return placement;
+
+    /*
+    float chromaticity_scale = 2.5*scale;
+    vec3 chromaticity_placement = (rotateY(M_PI/2.)*rotateX(M_PI/2.)*(chromaticity_scale)*(chromaticity_coord)).zxy-vec3(.33*chromaticity_scale,.33*chromaticity_scale,0.);
+    return chromaticity_placement;*/
+}
+
 vec3 properly_position_chromaticity(vec3 coord, float scale) {
     vec3 chromaticity_coord = coord/(coord.x+coord.y+coord.z);
     chromaticity_coord.z = 0.;

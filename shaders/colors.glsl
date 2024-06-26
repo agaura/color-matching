@@ -81,8 +81,20 @@ bool alphaCondition(float a, float b) {
     return ((a <= b) && (a >= 0.)) || ((a >= b) && (a <= 0.));
 }
 
-vec3 getAlphas(vec3 ref, vec3 ideal) {
+float scalarProjection(vec3 v1, vec3 v2) {
+    return dot(v1, v2)/dot(v2, v2);
+}
 
+float orthogonalDistance(vec3 v1, vec3 v2) {
+    return distance(v1, scalarProjection(v1, v2) * v2);
+}
+
+bool checkBounds(vec3 v1, vec3 v2) {
+    float t = scalarProjection(v1, v2);
+    return t > 0. && t < 1.;
+}
+
+vec3 oldGetAlphas(vec3 ref, vec3 ideal) {
     vec3 dist = vec3(0.);
     if (alphaCondition(ref.r, ideal.r)) {dist.r = distance(ref.gb, ideal.gb);}
     else {dist.r = distance(ref, ideal);}
@@ -90,6 +102,58 @@ vec3 getAlphas(vec3 ref, vec3 ideal) {
     else {dist.g = distance(ref, ideal);}
     if (alphaCondition(ref.b, ideal.b)) {dist.b = distance(ref.rg, ideal.rg);}
     else {dist.b = distance(ref, ideal);}
+
+    float widthScale = 10.;
+    return (1.-clamp(dist*widthScale,0.,1.));
+}
+
+vec3 getAlphas(vec3 ref, vec3 ideal) {
+
+    vec3 dist = vec3(0.);
+    /*if (alphaCondition(ref.r, ideal.r)) {dist.r = distance(ref.gb, ideal.gb);}
+    else {dist.r = distance(ref, ideal);}*/
+    if (alphaCondition(ref.r, ideal.r)) {dist.r = distance(ref.gb, ideal.gb);}
+    else {dist.r = distance(ref, ideal);}
+    if (alphaCondition(ref.g, ideal.g)) {dist.g = distance(ref.rb, ideal.rb);}
+    else {dist.g = distance(ref, ideal);}
+    if (alphaCondition(ref.b, ideal.b)) {dist.b = distance(ref.rg, ideal.rg);}
+    else {dist.b = distance(ref, ideal);}
+
+    if (checkBounds(ref,vec3(ideal.rg,0.))) {
+        dist.r = min(orthogonalDistance(ref, vec3(ideal.rg,0.)), dist.r);
+        dist.g = min(orthogonalDistance(ref, vec3(ideal.rg,0.)), dist.g);
+        }
+    else {
+        dist.r = min(distance(ref, ideal), dist.r);
+        dist.g = min(distance(ref, ideal), dist.g);
+        }
+    if (checkBounds(ref,vec3(ideal.r,0.,ideal.b))) {
+        dist.r = min(orthogonalDistance(ref, vec3(ideal.r,0.,ideal.b)), dist.r);
+        dist.b = min(orthogonalDistance(ref, vec3(ideal.r,0.,ideal.b)), dist.b);
+        }
+    else {
+        dist.r = min(distance(ref, ideal), dist.r);
+        dist.b = min(distance(ref, ideal), dist.b);
+        }
+    if (checkBounds(ref,vec3(0.,ideal.gb))) {
+        dist.g = min(orthogonalDistance(ref, vec3(0.,ideal.gb)), dist.g);
+        dist.b = min(orthogonalDistance(ref, vec3(0.,ideal.gb)), dist.b);
+        }
+    else {
+        dist.g = min(distance(ref, ideal), dist.g);
+        dist.b = min(distance(ref, ideal), dist.b);
+        }
+
+    if (checkBounds(ref,ideal)) {
+        dist.r = min(orthogonalDistance(ref, ideal), dist.r);
+        dist.g = min(orthogonalDistance(ref, ideal), dist.g);
+        dist.b = min(orthogonalDistance(ref, ideal), dist.b);
+        }
+    else {
+        dist.r = min(distance(ref, ideal), dist.r);
+        dist.g = min(distance(ref, ideal), dist.g);
+        dist.b = min(distance(ref, ideal), dist.b);
+        }
 
     float widthScale = 10.;
     return (1.-clamp(dist*widthScale,0.,1.));

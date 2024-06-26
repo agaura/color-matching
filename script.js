@@ -186,7 +186,7 @@ async function initObjects() {
     await initializeVisualSpectrum(environments.visualSpectrum, 'visualSpectrum', 'blank-chart');
     await initializeColorMatching(environments.colorMatching,'colorMatching','colorMatchingDiv');
     initializeSliders('#sliders', 0.717955252861182, 0.6260300163584603,
-        environments.complementCloud.outerCloud.material.uniforms.ideal.value,
+        environments.complementCloud,
         environments.colorMatching.composer.passes[1].uniforms.sliderColor.value
         );
     setUpMatching(environments.visualSpectrum.composer.passes[1].uniforms.spectrum.value, 'visualSpectrum', environments.colorMatching, environments.complementCloud);

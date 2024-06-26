@@ -72,9 +72,9 @@ export function initializeSliders(divName, a, g, vec1, vec2) {
     const greenAdj = regAdj + maxHeight * (1 - greenMax) / (redMax - redMin);
     const blueAdj = regAdj + maxHeight * (1 - blueMax) / (redMax - redMin);
     
-    initializeSlider(sliders, redHeight, redMin, redMax, 50, redAdj, [1,0,0], a, g, val => {vec1.setX(val); vec2.setX(val)});
-    initializeSlider(sliders, greenHeight, greenMin, greenMax, 125, greenAdj, [0,1,0], a, g, val => {vec1.setY(val); vec2.setY(val)});
-    initializeSlider(sliders, blueHeight, blueMin, blueMax, 200, blueAdj, [0,0,1], a, g, val => {vec1.setZ(val); vec2.setZ(val)});
+    initializeSlider(sliders, redHeight, redMin, redMax, 50, redAdj, [1,0,0], a, g, val => {vec1.setIdealX(val); vec2.setX(val)});
+    initializeSlider(sliders, greenHeight, greenMin, greenMax, 125, greenAdj, [0,1,0], a, g, val => {vec1.setIdealY(val); vec2.setY(val)});
+    initializeSlider(sliders, blueHeight, blueMin, blueMax, 200, blueAdj, [0,0,1], a, g, val => {vec1.setIdealZ(val); vec2.setZ(val)});
     
     fixTicks(sliders);
 }
