@@ -27,7 +27,7 @@ export class ComplementCloud {
         this.initializeCamera();
         this.initializeRenderer();
 
-        this.scale = sideLength * Math.pow(screen.width/1920,2/3);
+        this.scale = sideLength * Math.pow(Math.max(screen.width, screen.height)/1920,1/8);
         this.scene = new THREE.Scene();
         //this.addObjects();
 
