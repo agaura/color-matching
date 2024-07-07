@@ -158,7 +158,7 @@ function drawAxis() {
 }
 
 async function initializeVisualSpectrum(environment, canvasName, divName) {
-    initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
+    /*initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
     environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
 
     await addShaderOverlay(environment, 
@@ -175,6 +175,42 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
 
     drawAxis(); // Add axis
     window.addEventListener('resize', drawAxis); // Redraw the axis on window resize
+    */
+
+    try {
+        // Initialize environment with canvas and div elements
+        initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
+
+        // Load visual spectrum and assign it to environment
+        environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
+
+        // Add shader overlay to the environment
+        await addShaderOverlay(environment, 
+            {
+                tDiffuse: { value: null }, // tDiffuse is the texture of the rendered scene
+                time: { value: .0 },
+                alpha: { value: 0.717955252861182 },
+                gray: { value: 0.6260300163584603 },
+                scale: {value: 2.1230881684358494},
+                spectrum: {value: environment.spectrum}
+            },
+            getPath('shaders/visualSpectrum/vertex.glsl'),
+            getPath('shaders/visualSpectrum/fragment.glsl'));
+
+        // Draw the axis
+        drawAxis();
+
+        // Redraw the axis on window resize
+        window.addEventListener('resize', drawAxis);
+    } catch (error) {
+        // Handle any errors that occur during initialization
+        const errorDiv = document.getElementById("top-left");
+        if (errorDiv) {
+            errorDiv.innerHTML = `Error: ${error.message}`;
+        } else {
+            console.error(`Error: ${error.message}`);
+        }
+    }
 }
 
 async function initObjects() {

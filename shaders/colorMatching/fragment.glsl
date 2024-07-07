@@ -17,6 +17,18 @@ vec3 srgb_transfer_function(vec3 c) {
         srgb_transfer_function(c.b));
 }
 
+vec3 XYZ_to_xyY(vec3 c) {
+    return vec3(c.x / (c.x + c.y + c.z),
+        c.y / (c.x + c.y + c.z),
+        c.y);
+}
+
+vec3 xyY_to_XYZ(vec3 c) {
+    return vec3(c.x * c.z / c.y,
+        c.z,
+        (1. - c.x - c.y) * c.z / c.y);
+}
+
 float circleFade(float outerR, float innerR, float dist, float p) {
     return pow(clamp((1./(outerR-innerR)) * (outerR - dist),0.,1.),p);
 }
@@ -42,6 +54,10 @@ mat3 RGB1931toXYZ = transpose(mat3(0.49,0.31,0.2,
 
 vec2 circlePlace(float r, float theta) {
     return r*vec2(sin(theta), cos(theta));
+}
+
+float rand(vec2 co) {
+    return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
 }
 
 void main() {
@@ -85,8 +101,6 @@ void main() {
     float matchMultiplier = circleFade(outerRadius, innerRadius, distance(pos, matchPos),1.);
     vec3 matchComponent = alpha*XYZ_to_p3*matchColor/scale;
 
-    float edgeFade = circleFade(0.,0.25, min(distance(pos.x, 0.), distance(pos.x, aspectRatio)),4.);
-
     vec3 finalColor = srgb_transfer_function(vec3(background
         + sliderMultiplier.r * redComponent
         + sliderMultiplier.g * greenComponent
@@ -94,21 +108,35 @@ void main() {
         + matchMultiplier * matchComponent
         + potentialMultiplier * potentialComponent));
 
-    gl_FragColor = edgeFade*vec4(finalColor, 1.);
+    gl_FragColor = vec4(finalColor, 1.);
 
     float rotatingBox = 2.25;
     float combiningBox = 3.5;
     float matchingBox = 4.75;
     if ((pos.x > rotatingBox) && (pos.x < rotatingBox+1.)) {
-        gl_FragColor = edgeFade*vec4(finalColor, 1.);
+        gl_FragColor = vec4(finalColor, 1.);
 
         //vec3 backgroundColor = 
     }
     else if ((pos.x > combiningBox) && (pos.x < combiningBox+1.)) {
-        gl_FragColor = edgeFade*vec4(finalColor, 1.);
+        gl_FragColor = vec4(finalColor, 1.);
+
+        /*
+        float mixing = 1.-pow((sin(time/100. + 3.14*2.*rand(100.*vUv)) + 1.)/2.,0.25);
+        //vec3 equalEnergyGray = srgb_transfer_function(XYZ_to_p3*vec3(clamp(0.,1.,sliderColor.x)));
+        //vec3 channel = srgb_transfer_function(vec3(1.,0.,0.));
+        //vec3 trueColor = srgb_transfer_function(potentialMultiplier*mix(equalEnergyGray,channel,mixing));
+        //vec3 trueColor = (mix(equalEnergyGray,channel,mixing));
+
+        vec3 equalEnergyGray = vec3(0.33333,0.33333,clamp(0.,1.,sliderColor.x));
+        vec3 channel = XYZ_to_xyY(p3_to_XYZ*vec3(0.,0.,1.));
+        vec3 chromaticityMix = mix(equalEnergyGray, channel, mixing);
+        vec3 trueColor = srgb_transfer_function(XYZ_to_p3*xyY_to_XYZ(chromaticityMix));
+
+        gl_FragColor = vec4(trueColor,1.);*/
     }
     else if ((pos.x > matchingBox) && (pos.x < matchingBox+1.)) {
-        gl_FragColor = edgeFade*vec4(finalColor, 1.);
+        gl_FragColor = vec4(finalColor, 1.);
     }
     else {gl_FragColor = vec4(0.);}
 }
