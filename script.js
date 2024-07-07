@@ -178,7 +178,7 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
     
     //console.log(environment.spectrum.source.data.data);
     
-    document.getElementById("top-left").innerHTML = environment.spectrum.source.data.data.slice(0,4);
+    document.getElementById("top-left").innerHTML = "hello";
 
     /*
     try {
