@@ -177,8 +177,6 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
     window.addEventListener('resize', drawAxis); // Redraw the axis on window resize
     
     //console.log(environment.spectrum.source.data.data);
-    
-    document.getElementById("top-left").innerHTML = "hello";
 
     /*
     try {
@@ -217,6 +215,8 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
     }
         */
 }
+
+document.getElementById("top-left").innerHTML = "hello";
 
 async function initObjects() {
 
