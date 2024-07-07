@@ -1,3 +1,5 @@
+precision mediump float;
+
 uniform sampler2D tDiffuse;
 uniform sampler2D spectrum;
 uniform float time;
