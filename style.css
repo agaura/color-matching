@@ -82,7 +82,7 @@ canvas {
     height: 100%;
     /*filter: brightness(1.36);*/
     /*filter: blur(1px);*/
-    image-rendering: pixelated;
+    /*image-rendering: pixelated;*/
 }
 
 button {
