@@ -80,6 +80,7 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
+    touch-action: none
     /*filter: brightness(1.36);*/
     /*filter: blur(1px);*/
     /*image-rendering: pixelated;*/
