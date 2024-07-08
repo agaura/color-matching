@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function getElementOffset(element) {
+function getElementOffset(element) {
     let top = 0, left = 0;
     while (element) {
         top += element.offsetTop - element.scrollTop + element.clientTop;
@@ -8,6 +8,14 @@ export function getElementOffset(element) {
         element = element.offsetParent;
     }
     return { top, left };
+}
+
+export function calibrateCanvas(canvas, renderer, container) {
+    var rect = container.getBoundingClientRect();
+    let { top, left } = getElementOffset(container);
+    canvas.style.top = `${top}px`;
+    canvas.style.left = `${left}px`;
+    renderer.setSize(rect.width, rect.height);
 }
 
 export function getPath(fileName) {
@@ -33,42 +41,6 @@ export async function loadShader(url) {
     return response.text();
 }
 
-/*
-export async function initializeEnvironment(environment, container) {
-
-    // Create scene
-    environment.scene = new THREE.Scene();
-    
-    // Create camera
-    environment.camera = new THREE.OrthographicCamera( 2 / - 2, 2 / 2, 2 / 2, 2 / - 2, 0, 1000 );
-    environment.camera.position.set(0, 0, 0);
-    environment.camera.zoom = 2;
-    environment.camera.updateProjectionMatrix();
-
-    // Create renderer
-    environment.renderer = new THREE.WebGLRenderer({
-        canvas: environment.canvas,
-        alpha: true, premultipliedAlpha: true,
-        antialias: true});
-    //THREE.ColorManagement.workingColorSpace = THREE.LinearDisplayP3ColorSpace; // I think this isn't necessary
-    environment.renderer.outputColorSpace = THREE.DisplayP3ColorSpace
-
-    // Resize
-    var rect = container.getBoundingClientRect();
-    let { top, left } = getElementOffset(container);
-    environment.canvas.style.top = `${top}px`;
-    environment.canvas.style.left = `${left}px`;
-    environment.renderer.setSize(rect.width, rect.height);
-
-    window.addEventListener('resize', () => {
-        rect = container.getBoundingClientRect();
-        let { top, left } = getElementOffset(container);
-        environment.canvas.style.top = `${top}px`;
-        environment.canvas.style.left = `${left}px`;
-        environment.renderer.setSize(rect.width, rect.height);
-    });
-}*/
-
 export function initEnvironment(environment, canvasElement, container) {
 
     // Add canvas
@@ -92,18 +64,10 @@ export function initEnvironment(environment, canvasElement, container) {
     environment.renderer.outputColorSpace = THREE.DisplayP3ColorSpace
 
     // Resize
-    var rect = container.getBoundingClientRect();
-    let { top, left } = getElementOffset(container);
-    environment.canvas.style.top = `${top}px`;
-    environment.canvas.style.left = `${left}px`;
-    environment.renderer.setSize(rect.width, rect.height);
+    calibrateCanvas(environment.canvas, environment.renderer, container);
 
     window.addEventListener('resize', () => {
-        rect = container.getBoundingClientRect();
-        let { top, left } = getElementOffset(container);
-        environment.canvas.style.top = `${top}px`;
-        environment.canvas.style.left = `${left}px`;
-        environment.renderer.setSize(rect.width, rect.height);
+        calibrateCanvas(environment.canvas, environment.renderer, container);
     });
 }
 
