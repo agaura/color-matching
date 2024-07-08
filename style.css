@@ -53,21 +53,22 @@ body, html {
 }
 
 #top-left {
-    flex-grow: 1;
-    height: 30%;
+    flex-shrink: 0; /* Prevent shrinking */
     color: white;
     margin-left: 4%; /* Adjust the left margin as needed */
     margin-right: 4%; /* Adjust the right margin as needed */
     margin-top: 20px;
     margin-bottom: 20px;
-    /*font-family: 'Courier', monospace;*/
+    /* Ensure it adjusts to content size without overflowing */
+    min-height: 30%; /* Optional: Minimum height if needed */
 }
 
 #bottom-left {
-    flex-grow: 1;
-    height: 70%;
+    flex-grow: 1; /* Allow to grow and fill remaining space */
     color: white;
-    /*font-family: 'Courier', monospace;*/
+    margin-left: 4%; /* Match the margin with top-left */
+    margin-right: 4%; /* Match the margin with top-left */
+    /* Ensure it stretches to the bottom of the page */
 }
 
 #sliders {
