@@ -27,6 +27,9 @@ export class Motion {
         canvas.addEventListener("pointerdown", this.#start.bind(this), false);
         document.addEventListener("pointermove", this.#moveWhileHold.bind(this), false);
         document.addEventListener("pointerup", this.#release.bind(this), false);
+		canvas.addEventListener("touchstart", this.#start.bind(this), false);
+        document.addEventListener("touchmove", this.#moveWhileHold.bind(this), false);
+        document.addEventListener("touchend", this.#release.bind(this), false);
 	}
 
 	/**
