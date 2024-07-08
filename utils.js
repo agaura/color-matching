@@ -160,31 +160,31 @@ export function loadTexturesFromArray(data) {
         packFloatToUint8Array(data[3 * i + 2], spectralDataZ, 4 * i);
     }
 
-    const visualSpectrumX = new THREE.DataTexture(spectralDataX, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
-    visualSpectrumX.magFilter = THREE.NearestFilter;
-    visualSpectrumX.minFilter = THREE.NearestFilter;
-    visualSpectrumX.wrapS = THREE.ClampToEdgeWrapping;
-    visualSpectrumX.wrapT = THREE.ClampToEdgeWrapping;
-    visualSpectrumX.needsUpdate = true;
+    const X = new THREE.DataTexture(spectralDataX, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    X.magFilter = THREE.NearestFilter;
+    X.minFilter = THREE.NearestFilter;
+    X.wrapS = THREE.ClampToEdgeWrapping;
+    X.wrapT = THREE.ClampToEdgeWrapping;
+    X.needsUpdate = true;
 
-    const visualSpectrumY = new THREE.DataTexture(spectralDataY, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
-    visualSpectrumY.magFilter = THREE.NearestFilter;
-    visualSpectrumY.minFilter = THREE.NearestFilter;
-    visualSpectrumY.wrapS = THREE.ClampToEdgeWrapping;
-    visualSpectrumY.wrapT = THREE.ClampToEdgeWrapping;
-    visualSpectrumY.needsUpdate = true;
+    const Y = new THREE.DataTexture(spectralDataY, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    Y.magFilter = THREE.NearestFilter;
+    Y.minFilter = THREE.NearestFilter;
+    Y.wrapS = THREE.ClampToEdgeWrapping;
+    Y.wrapT = THREE.ClampToEdgeWrapping;
+    Y.needsUpdate = true;
 
-    const visualSpectrumZ = new THREE.DataTexture(spectralDataZ, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
-    visualSpectrumZ.magFilter = THREE.NearestFilter;
-    visualSpectrumZ.minFilter = THREE.NearestFilter;
-    visualSpectrumZ.wrapS = THREE.ClampToEdgeWrapping;
-    visualSpectrumZ.wrapT = THREE.ClampToEdgeWrapping;
-    visualSpectrumZ.needsUpdate = true;
+    const Z = new THREE.DataTexture(spectralDataZ, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    Z.magFilter = THREE.NearestFilter;
+    Z.minFilter = THREE.NearestFilter;
+    Z.wrapS = THREE.ClampToEdgeWrapping;
+    Z.wrapT = THREE.ClampToEdgeWrapping;
+    Z.needsUpdate = true;
 
     return {
-        visualSpectrumX,
-        visualSpectrumY,
-        visualSpectrumZ
+        X,
+        Y,
+        Z
     };
 }
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { getComplementSpectrum } from './coordinates.js';
-import { loadShader, createPointCube, loadVisualSpectrumArray, loadTextureFromArray, getPath } from './utils.js';
+import { lookupTable } from './coordinates.js';
+import { loadShader, createPointCube, loadVisualSpectrumArray, loadTextureFromArray, loadTexturesFromArray, getPath } from './utils.js';
 import { Motion } from './motion.js';
 
 export class ComplementCloud {
@@ -87,11 +87,16 @@ export class ComplementCloud {
     }
 
     createShaderMaterial(vertexShader, fragmentShader, cloudID) {
+        let spectra = loadTexturesFromArray(lookupTable);
+
         return new THREE.ShaderMaterial({
             vertexShader: vertexShader,
             fragmentShader: fragmentShader,
             uniforms: {
-                spectrumLookup: {value: getComplementSpectrum()},
+                spectrumLookup: {value: loadTextureFromArray(lookupTable)},
+                spectrumLookupX: {value: spectra.X},
+                spectrumLookupY: {value: spectra.Y},
+                spectrumLookupZ: {value: spectra.Z},
                 ideal: {
                     type: "3f",
                     value: new THREE.Vector3(0., 0., 0.)

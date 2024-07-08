@@ -4,7 +4,10 @@ uniform int mode;
 uniform vec3 ideal;
 uniform float time;
 uniform int cloudID;
-uniform sampler2D spectrumLookup;
+//uniform sampler2D spectrumLookup;
+uniform sampler2D spectrumLookupX;
+uniform sampler2D spectrumLookupY;
+uniform sampler2D spectrumLookupZ;
 
 void place_complement_cloud() {
 
@@ -37,7 +40,8 @@ void place_complement_cloud() {
 
     // else put it in the general portion of the cloud;
     else {
-        xyz_color = push_into_displayable_XYZ_cloud(spectrumLookup, cubic_cloud_distribute2(position, time));
+        //xyz_color = push_into_displayable_XYZ_cloud(spectrumLookup, cubic_cloud_distribute2(position, time));
+        xyz_color = push_into_displayable_XYZ_cloud2(spectrumLookupX, spectrumLookupY, spectrumLookupZ, cubic_cloud_distribute2(position, time), 1201.);
 
         //gl_PointSize = 2.*(sin(time/250.)/2.+0.5);
     }

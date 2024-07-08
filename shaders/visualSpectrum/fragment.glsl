@@ -92,6 +92,24 @@ float unpackUint8ToFloat(vec4 value) {
     return intBitsToFloat(intBits);
 }
 
+// this is necessary because the automatic linear filtering in the javascript seems to have some issues with packed textures
+vec3 linearFilterPackedTexture(sampler2D x, sampler2D y, sampler2D z, vec2 uv, float width) {
+
+    float alpha = fract(uv.x * width);
+    vec2 left = vec2(uv.x - alpha / width, uv.y);
+    vec2 right = vec2(uv.x + (1. - alpha) / width, uv.y);
+
+    vec3 leftPixel = vec3(unpackUint8ToFloat(texture2D(x, left)),
+        unpackUint8ToFloat(texture2D(y, left)),
+        unpackUint8ToFloat(texture2D(z, left)));
+
+    vec3 rightPixel = vec3(unpackUint8ToFloat(texture2D(x, right)),
+        unpackUint8ToFloat(texture2D(y, right)),
+        unpackUint8ToFloat(texture2D(z, right)));
+
+    return mix(leftPixel, rightPixel, alpha);
+}
+
 mat3 p3_to_XYZ = transpose(mat3(
     0.4865709,  0.2656677,  0.1982173,
     0.2289746,  0.6917385,  0.0792869,
@@ -115,9 +133,7 @@ void main() {
     //vec3 xyzColor = texture2D(spectrum, vUv).xyz;
     //xyzColor = xyzColor/dot(XYZto1931*xyzColor, vec3(1.))*0.378;
 
-    vec3 xyzColor = vec3(unpackUint8ToFloat(texture2D(spectrumX, vUv)),
-        unpackUint8ToFloat(texture2D(spectrumY, vUv)),
-        unpackUint8ToFloat(texture2D(spectrumZ, vUv)));
+    vec3 xyzColor = linearFilterPackedTexture(spectrumX, spectrumY, spectrumZ, vUv, 3200.); // have this 3200 as a uniform later
 
     vec3 mixedColor = mix(vec3(gray), XYZ_to_p3*xyzColor/scale, alpha);
     //vec3 mixedColor = mix(mix(vec3(gray), vec3(0.), alpha), XYZ_to_p3*xyzColor/scale, sin(time/10000.)/2. + 0.5);

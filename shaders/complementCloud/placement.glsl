@@ -41,6 +41,17 @@ vec3 push_into_displayable_XYZ_cloud(sampler2D spectrum, vec3 distribution) {
     return new_coord;
 }
 
+vec3 push_into_displayable_XYZ_cloud2(sampler2D x, sampler2D y, sampler2D z, vec3 distribution, float width) {
+
+    // send distribution coordinates into cloud coordinates
+    vec3 v = linearFilterPackedTexture(x, y, z, vec2(distribution.x, 0.5), width);
+
+    // this one I think is actually prettier when you remove the belt
+    vec3 new_coord = mix(v, vec3(distribution.y), pow(distribution.z,1.));
+
+    return new_coord;
+}
+
 // takes a cube of points and returns the cube but with the points moving in a cloud
 vec3 cubic_cloud_distribute(vec3 pos, float time) {
     // freedom of movement for each particle

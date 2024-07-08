@@ -76,6 +76,34 @@ mat3 rotateZ(float theta) {
 
 
 
+float unpackUint8ToFloat(vec4 value) {
+    int intBits = int(value.r * 255.0) << 24 |
+                  int(value.g * 255.0) << 16 |
+                  int(value.b * 255.0) << 8 |
+                  int(value.a * 255.0);
+    return intBitsToFloat(intBits);
+}
+
+// this is necessary because the automatic linear filtering in the javascript seems to have some issues with packed textures
+vec3 linearFilterPackedTexture(sampler2D x, sampler2D y, sampler2D z, vec2 uv, float width) {
+
+    float alpha = fract(uv.x * width);
+    vec2 left = vec2(uv.x - alpha / width, uv.y);
+    vec2 right = vec2(uv.x + (1. - alpha) / width, uv.y);
+
+    vec3 leftPixel = vec3(unpackUint8ToFloat(texture2D(x, left)),
+        unpackUint8ToFloat(texture2D(y, left)),
+        unpackUint8ToFloat(texture2D(z, left)));
+
+    vec3 rightPixel = vec3(unpackUint8ToFloat(texture2D(x, right)),
+        unpackUint8ToFloat(texture2D(y, right)),
+        unpackUint8ToFloat(texture2D(z, right)));
+
+    return mix(leftPixel, rightPixel, alpha);
+}
+
+
+
 float circleFade(float outerR, float innerR, float dist, float p) {
     return pow(clamp((1./(outerR-innerR)) * (outerR - dist),0.,1.),p);
 }
