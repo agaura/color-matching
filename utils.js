@@ -115,7 +115,6 @@ export function createPointCube(scale) {
     return positions;
 }
 
-/*
 export async function loadVisualSpectrum(csvFile) {
     let threeJSData = [];
 
@@ -141,7 +140,7 @@ export async function loadVisualSpectrum(csvFile) {
     visualSpectrum.needsUpdate = true;
 
     return visualSpectrum;
-}*/
+}
 
 /*
 export function loadVisualSpectrum(csvFile) {
@@ -211,7 +210,7 @@ export async function loadVisualSpectrum(csvFile) {
     return visualSpectrum;
 }*/
 
-
+/*
 export async function loadVisualSpectrum(csvFile) {
     let threeJSData = [];
 
@@ -237,4 +236,4 @@ export async function loadVisualSpectrum(csvFile) {
     visualSpectrum.needsUpdate = true;
 
     return visualSpectrum;
-}
+}*/

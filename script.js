@@ -165,12 +165,14 @@ function checkGLError(gl) {
 }
 
 function checkFloatTextureSupport(gl) {
+    const extColorBufferFloat = gl.getExtension('EXT_color_buffer_float');
     const floatTextureExt = gl.getExtension('OES_texture_float');
     const floatLinearExt = gl.getExtension('OES_texture_float_linear');
     const halfFloatTextureExt = gl.getExtension('OES_texture_half_float');
     const halfFloatLinearExt = gl.getExtension('OES_texture_half_float_linear');
 
     return {
+        colorBufferFloat: !!extColorBufferFloat,
         floatTexture: !!floatTextureExt,
         floatLinear: !!floatLinearExt,
         halfFloatTexture: !!halfFloatTextureExt,
@@ -219,7 +221,7 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
         checkGLError(gl); // Check for errors after context creation
 
         const support = checkFloatTextureSupport(gl);
-        document.getElementById("top-left").innerHTML = [support.floatTexture, support.floatLinear, support.halfFloatTexture, support.halfFloatLinear];
+        document.getElementById("top-left").innerHTML = [support.colorBufferFloat, support.floatTexture, support.floatLinear, support.halfFloatTexture, support.halfFloatLinear];
 
         console.log(environment.spectrum.image);
         //document.getElementById("top-left").innerHTML = environment.spectrum.image;
