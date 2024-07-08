@@ -204,6 +204,11 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
         const gl = environment.renderer.getContext();
         checkGLError(gl); // Check for errors after context creation
 
+        console.log(environment.spectrum.image);
+        //document.getElementById("top-left").innerHTML = environment.spectrum.image;
+
+        console.log( environment.renderer.extensions.has( 'OES_texture_float'  ) );
+
         //document.getElementById("top-left").innerHTML = environment.spectrum.source.data.data.slice(0,4);
 
         await addShaderOverlay(environment, 
@@ -213,7 +218,7 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
                 alpha: { value: 0.717955252861182 },
                 gray: { value: 0.6260300163584603 },
                 scale: {value: 2.1230881684358494},
-                spectrum: {value: await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'))}
+                spectrum: {value: environment.spectrum}
             },
             getPath('shaders/visualSpectrum/vertex.glsl'),
             getPath('shaders/visualSpectrum/fragment.glsl'));
@@ -224,6 +229,12 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
 
         // Redraw the axis on window resize
         window.addEventListener('resize', drawAxis);
+
+        // Additional debugging to ensure texture is set correctly
+
+        //gl.activeTexture(gl.TEXTURE0); // Activate texture unit 0
+        //gl.bindTexture(gl.TEXTURE_2D, environment.spectrum);
+        //gl.uniform1i(gl.getUniformLocation(environment.renderer.domElement, 'spectrum'), 0);
     } catch (error) {
         // Handle any errors that occur during initialization
         const errorDiv = document.getElementById("top-left");

@@ -115,6 +115,7 @@ export function createPointCube(scale) {
     return positions;
 }
 
+/*
 export async function loadVisualSpectrum(csvFile) {
     let threeJSData = [];
 
@@ -131,6 +132,25 @@ export async function loadVisualSpectrum(csvFile) {
         spectralData[4 * i] = threeJSData[3 * i] * 1;
         spectralData[4 * i + 1] = threeJSData[3 * i + 1] * 1;
         spectralData[4 * i + 2] = threeJSData[3 * i + 2] * 1;
+        spectralData[4 * i + 3] = 1; // Alpha channel
+    }
+
+    // Create the data texture
+    const visualSpectrum = new THREE.DataTexture(spectralData, spectrumWidth, 1, THREE.RGBAFormat, THREE.FloatType);
+    visualSpectrum.magFilter = THREE.LinearFilter; // This allows linear interpolation
+    visualSpectrum.needsUpdate = true;
+
+    return visualSpectrum;
+}*/
+
+export function loadVisualSpectrum(csvFile) {
+
+    const spectrumWidth = 3200;
+    const spectralData = new Float32Array(spectrumWidth * 4);
+    for (let i = 0; i < spectrumWidth; i++) {
+        spectralData[4 * i] = i / spectrumWidth * 1;
+        spectralData[4 * i + 1] = 0;
+        spectralData[4 * i + 2] = 0;
         spectralData[4 * i + 3] = 1; // Alpha channel
     }
 
