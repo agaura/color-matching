@@ -1,5 +1,8 @@
 uniform sampler2D tDiffuse;
 uniform sampler2D spectrum;
+uniform sampler2D spectrumR;
+uniform sampler2D spectrumG;
+uniform sampler2D spectrumB;
 uniform float time;
 uniform float alpha;
 uniform float scale;
@@ -19,6 +22,14 @@ vec3 srgb_transfer_function(vec3 c) {
 
 float circleFade(float outerR, float innerR, float dist, float p) {
     return pow(clamp((1./(outerR-innerR)) * (outerR - dist),0.,1.),p);
+}
+
+float unpackUint8ToFloat(vec4 value) {
+    int intBits = int(value.r * 255.0) << 24 |
+                  int(value.g * 255.0) << 16 |
+                  int(value.b * 255.0) << 8 |
+                  int(value.a * 255.0);
+    return intBitsToFloat(intBits);
 }
 
 mat3 p3_to_XYZ = transpose(mat3(
@@ -44,6 +55,10 @@ void main() {
     vec3 xyzColor = texture2D(spectrum, vUv).xyz;
     //xyzColor = xyzColor/dot(XYZto1931*xyzColor, vec3(1.))*0.378;
 
+    xyzColor = vec3(unpackUint8ToFloat(texture2D(spectrumR, vUv)),
+        unpackUint8ToFloat(texture2D(spectrumG, vUv)),
+        unpackUint8ToFloat(texture2D(spectrumB, vUv)));
+
     vec3 mixedColor = mix(vec3(gray), XYZ_to_p3*xyzColor/scale, alpha);
     //vec3 mixedColor = mix(vec3(gray), XYZ_to_p3*xyzColor/scale, sin(time/1000.)/2. + 0.5);
     vec3 displayableColor = srgb_transfer_function(mixedColor);
@@ -57,6 +72,12 @@ void main() {
     else {
         gl_FragColor = vec4(displayableColor, 1.0);
     }
+
+    /*
+    float xxxxx = unpackUint8ToFloat(vec4(0.,95.,151.,108.)/255.);
+    float yyyyy = unpackUint8ToFloat(vec4(64.,246.,171.,27.)/255.);
+
+    gl_FragColor = vec4(intBitsToFloat(1054421182), 0., 0., 1.);*/
     
     //float fade = 1.-circleFade(0.1, 0.05, distance(mixedColor, mix(vec3(gray), vec3(0.0), alpha)),2.);
     //gl_FragColor *= fade;

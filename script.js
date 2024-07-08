@@ -1,7 +1,7 @@
 // script.js
 import * as THREE from 'three';
 import { ComplementCloud } from './complementCloud.js';
-import { getPath, loadShader, initEnvironment, loadVisualSpectrum } from './utils.js';
+import { getPath, loadShader, initEnvironment, loadVisualSpectrum, loadVisualSpectrum2 } from './utils.js';
 import { initializeSliders } from './sliders.js';
 import { EffectComposer } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/RenderPass';
@@ -217,16 +217,18 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
         initEnvironment(environment, canvas, div);
         environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
 
+        const spectra = await loadVisualSpectrum2(getPath('lin2012xyz2e_fine_7sf.csv'));
+
         const gl = environment.renderer.getContext();
-        checkGLError(gl); // Check for errors after context creation
+        //checkGLError(gl); // Check for errors after context creation
 
-        const support = checkFloatTextureSupport(gl);
-        document.getElementById("top-left").innerHTML = [support.colorBufferFloat, support.floatTexture, support.floatLinear, support.halfFloatTexture, support.halfFloatLinear];
+        //const support = checkFloatTextureSupport(gl);
+        //document.getElementById("top-left").innerHTML = [support.colorBufferFloat, support.floatTexture, support.floatLinear, support.halfFloatTexture, support.halfFloatLinear];
 
-        console.log(environment.spectrum.image);
+        //console.log(environment.spectrum.image);
         //document.getElementById("top-left").innerHTML = environment.spectrum.image;
 
-        console.log( environment.renderer.extensions.has( 'OES_texture_float'  ) );
+        //console.log( environment.renderer.extensions.has( 'OES_texture_float'  ) );
 
         //document.getElementById("top-left").innerHTML = environment.spectrum.source.data.data.slice(0,4);
 
@@ -237,7 +239,10 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
                 alpha: { value: 0.717955252861182 },
                 gray: { value: 0.6260300163584603 },
                 scale: {value: 2.1230881684358494},
-                spectrum: {value: environment.spectrum}
+                spectrum: {value: environment.spectrum},
+                spectrumR: {value: spectra.visualSpectrumR},
+                spectrumG: {value: spectra.visualSpectrumG},
+                spectrumB: {value: spectra.visualSpectrumB}
             },
             getPath('shaders/visualSpectrum/vertex.glsl'),
             getPath('shaders/visualSpectrum/fragment.glsl'));
