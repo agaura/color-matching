@@ -157,6 +157,13 @@ function drawAxis() {
        .call(axis);
 }
 
+function checkGLError(gl) {
+    const error = gl.getError();
+    if (error !== gl.NO_ERROR) {
+        console.error(`WebGL Error: ${error}`);
+    }
+}
+
 async function initializeVisualSpectrum(environment, canvasName, divName) {
     /*initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
     environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
@@ -184,15 +191,19 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
 
     
     try {
-        // Initialize environment with canvas and div elements
-        initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
+        const canvas = document.getElementById(canvasName);
+        const div = document.getElementById(divName);
 
-        // Load visual spectrum and assign it to environment
+        if (!canvas || !div) {
+            throw new Error('Canvas or Div not found');
+        }
+
+        initEnvironment(environment, canvas, div);
         environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
 
-        document.getElementById("top-left").innerHTML = "hello";
+        const gl = environment.renderer.getContext();
+        checkGLError(gl); // Check for errors after context creation
 
-        // Add shader overlay to the environment
         await addShaderOverlay(environment, 
             {
                 tDiffuse: { value: null }, // tDiffuse is the texture of the rendered scene
@@ -205,8 +216,9 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
             getPath('shaders/visualSpectrum/vertex.glsl'),
             getPath('shaders/visualSpectrum/fragment.glsl'));
 
-        // Draw the axis
-        drawAxis();
+        checkGLError(gl); // Check for errors after adding shader overlay
+
+        drawAxis(); // Add axis
 
         // Redraw the axis on window resize
         window.addEventListener('resize', drawAxis);
