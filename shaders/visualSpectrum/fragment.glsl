@@ -1,5 +1,3 @@
-precision mediump float;
-
 uniform sampler2D tDiffuse;
 uniform sampler2D spectrum;
 uniform float time;
@@ -58,6 +56,10 @@ void main() {
     }
     else {
         gl_FragColor = vec4(displayableColor, 1.0);
+    }
+
+    if (length(xyzColor) < 0.01) {
+        gl_FragColor = vec4(1.0,0.0,0.0,1.0);
     }
     
     //float fade = 1.-circleFade(0.1, 0.05, distance(mixedColor, mix(vec3(gray), vec3(0.0), alpha)),2.);
