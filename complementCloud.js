@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { getComplementSpectrum } from './coordinates.js';
-import { loadShader, createPointCube, loadVisualSpectrum, getPath } from './utils.js';
+import { loadShader, createPointCube, loadVisualSpectrumArray, loadTextureFromArray, getPath } from './utils.js';
 import { Motion } from './motion.js';
 
 export class ComplementCloud {
@@ -16,7 +16,6 @@ export class ComplementCloud {
     P3Cloud = null;
     sRGBCloud = null;
     spectrum = null;
-    spectralLine = null;
     mode = null;
     ready = null; // this is actually a promise (?) thingy
 
@@ -32,7 +31,6 @@ export class ComplementCloud {
         //this.addObjects();
 
         this.ready = this.addObjects();
-        this.spectralLine = loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
 
         this.enableResize(document.getElementById(divName));
     }
@@ -58,9 +56,9 @@ export class ComplementCloud {
     async fillSpectrum() {
 
         this.matchesDrawn = 9600/3;
+        let spectralData = loadTextureFromArray(await loadVisualSpectrumArray(getPath('lin2012xyz2e_fine_7sf.csv')));
         this.spectrum.geometry.attributes.position.needsUpdate = true;
-
-        let spectrum = await this.spectralLine; // this await is necessary, at least on mobile
+        let spectrum = spectralData;
     
         for (let i = 0; i < this.matchesDrawn; i++) {
             this.spectrum.geometry.attributes.position.setXYZ(i,

@@ -1,7 +1,7 @@
 // script.js
 import * as THREE from 'three';
 import { ComplementCloud } from './complementCloud.js';
-import { getPath, loadShader, initEnvironment, loadVisualSpectrum, loadVisualSpectrum2 } from './utils.js';
+import { getPath, loadShader, initEnvironment, loadVisualSpectrum, loadVisualSpectrum2, loadVisualSpectrumArray, loadTextureFromArray, loadTexturesFromArray } from './utils.js';
 import { initializeSliders } from './sliders.js';
 import { EffectComposer } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'https://unpkg.com/three@0.162.0/examples/jsm/postprocessing/RenderPass';
@@ -157,32 +157,11 @@ function drawAxis() {
        .call(axis);
 }
 
-function checkGLError(gl) {
-    const error = gl.getError();
-    if (error !== gl.NO_ERROR) {
-        console.error(`WebGL Error: ${error}`);
-    }
-}
-
-function checkFloatTextureSupport(gl) {
-    const extColorBufferFloat = gl.getExtension('EXT_color_buffer_float');
-    const floatTextureExt = gl.getExtension('OES_texture_float');
-    const floatLinearExt = gl.getExtension('OES_texture_float_linear');
-    const halfFloatTextureExt = gl.getExtension('OES_texture_half_float');
-    const halfFloatLinearExt = gl.getExtension('OES_texture_half_float_linear');
-
-    return {
-        colorBufferFloat: !!extColorBufferFloat,
-        floatTexture: !!floatTextureExt,
-        floatLinear: !!floatLinearExt,
-        halfFloatTexture: !!halfFloatTextureExt,
-        halfFloatLinear: !!halfFloatLinearExt
-    };
-}
-
 async function initializeVisualSpectrum(environment, canvasName, divName) {
-    /*initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
-    environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
+    initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
+    environment.spectrum = loadTextureFromArray(await loadVisualSpectrumArray(getPath('lin2012xyz2e_fine_7sf.csv')));
+    const spectra = loadTexturesFromArray(await loadVisualSpectrumArray(getPath('lin2012xyz2e_fine_7sf.csv')));
+    //const spectra = await loadVisualSpectrum2(getPath('lin2012xyz2e_fine_7sf.csv'));
 
     await addShaderOverlay(environment, 
         {
@@ -191,7 +170,10 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
             alpha: { value: 0.717955252861182 },
             gray: { value: 0.6260300163584603 },
             scale: {value: 2.1230881684358494},
-            spectrum: {value: environment.spectrum}
+            //spectrum: {value: environment.spectrum},
+            spectrumX: {value: spectra.visualSpectrumX},
+            spectrumY: {value: spectra.visualSpectrumY},
+            spectrumZ: {value: spectra.visualSpectrumZ}
         },
         getPath('shaders/visualSpectrum/vertex.glsl'),
         getPath('shaders/visualSpectrum/fragment.glsl'));
@@ -203,71 +185,6 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
     
     //document.getElementById("top-left").innerHTML = "hello";
 
-    */
-
-    
-    try {
-        const canvas = document.getElementById(canvasName);
-        const div = document.getElementById(divName);
-
-        if (!canvas || !div) {
-            throw new Error('Canvas or Div not found');
-        }
-
-        initEnvironment(environment, canvas, div);
-        environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
-
-        const spectra = await loadVisualSpectrum2(getPath('lin2012xyz2e_fine_7sf.csv'));
-
-        const gl = environment.renderer.getContext();
-        //checkGLError(gl); // Check for errors after context creation
-
-        //const support = checkFloatTextureSupport(gl);
-        //document.getElementById("top-left").innerHTML = [support.colorBufferFloat, support.floatTexture, support.floatLinear, support.halfFloatTexture, support.halfFloatLinear];
-
-        //console.log(environment.spectrum.image);
-        //document.getElementById("top-left").innerHTML = environment.spectrum.image;
-
-        //console.log( environment.renderer.extensions.has( 'OES_texture_float'  ) );
-
-        //document.getElementById("top-left").innerHTML = environment.spectrum.source.data.data.slice(0,4);
-
-        await addShaderOverlay(environment, 
-            {
-                tDiffuse: { value: null }, // tDiffuse is the texture of the rendered scene
-                time: { value: .0 },
-                alpha: { value: 0.717955252861182 },
-                gray: { value: 0.6260300163584603 },
-                scale: {value: 2.1230881684358494},
-                spectrum: {value: environment.spectrum},
-                spectrumX: {value: spectra.visualSpectrumX},
-                spectrumY: {value: spectra.visualSpectrumY},
-                spectrumZ: {value: spectra.visualSpectrumZ}
-            },
-            getPath('shaders/visualSpectrum/vertex.glsl'),
-            getPath('shaders/visualSpectrum/fragment.glsl'));
-
-        checkGLError(gl); // Check for errors after adding shader overlay
-
-        drawAxis(); // Add axis
-
-        // Redraw the axis on window resize
-        window.addEventListener('resize', drawAxis);
-
-        // Additional debugging to ensure texture is set correctly
-
-        //gl.activeTexture(gl.TEXTURE0); // Activate texture unit 0
-        //gl.bindTexture(gl.TEXTURE_2D, environment.spectrum);
-        //gl.uniform1i(gl.getUniformLocation(environment.renderer.domElement, 'spectrum'), 0);
-    } catch (error) {
-        // Handle any errors that occur during initialization
-        const errorDiv = document.getElementById("top-left");
-        if (errorDiv) {
-            errorDiv.innerHTML = `Error: ${error.message}`;
-        } else {
-            console.error(`Error: ${error.message}`);
-        }
-    }
 
 }
 
@@ -283,7 +200,7 @@ async function initObjects() {
         environments.complementCloud,
         environments.colorMatching.composer.passes[1].uniforms.sliderColor.value
         );
-    setUpMatching(environments.visualSpectrum.composer.passes[1].uniforms.spectrum.value, 'visualSpectrum', environments.colorMatching, environments.complementCloud);
+    setUpMatching(environments.visualSpectrum.spectrum, 'visualSpectrum', environments.colorMatching, environments.complementCloud);
 
 }
 

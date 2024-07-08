@@ -115,6 +115,79 @@ export function createPointCube(scale) {
     return positions;
 }
 
+export async function loadVisualSpectrumArray(csvFile) {
+    let array = [];
+
+    // Await the asynchronous loading and processing of the CSV file
+    const data = await d3.csv(csvFile);
+    let modifiedData = data.slice(0, 3200); // 390.0 to 709.9
+    modifiedData.forEach((row) => {
+        array.push(parseFloat(row.X), parseFloat(row.Y), parseFloat(row.Z));
+    });
+
+    return array;
+}
+
+export function loadTextureFromArray(data) {
+
+    const spectrumWidth = data.length / 3;
+    const spectralData = new Float32Array(spectrumWidth * 4);
+    for (let i = 0; i < spectrumWidth; i++) {
+        spectralData[4 * i] = data[3 * i] * 1;
+        spectralData[4 * i + 1] = data[3 * i + 1] * 1;
+        spectralData[4 * i + 2] = data[3 * i + 2] * 1;
+        spectralData[4 * i + 3] = 1; // Alpha channel
+    }
+
+    // Create the data texture
+    const visualSpectrum = new THREE.DataTexture(spectralData, spectrumWidth, 1, THREE.RGBAFormat, THREE.FloatType);
+    visualSpectrum.magFilter = THREE.LinearFilter; // This allows linear interpolation
+    visualSpectrum.needsUpdate = true;
+
+    return visualSpectrum;
+}
+
+export function loadTexturesFromArray(data) {
+
+    const spectrumWidth = data.length / 3;
+    const spectralDataX = new Uint8Array(spectrumWidth * 4);
+    const spectralDataY = new Uint8Array(spectrumWidth * 4);
+    const spectralDataZ = new Uint8Array(spectrumWidth * 4);
+
+    for (let i = 0; i < spectrumWidth; i++) {
+        packFloatToUint8Array(data[3 * i], spectralDataX, 4 * i);
+        packFloatToUint8Array(data[3 * i + 1], spectralDataY, 4 * i);
+        packFloatToUint8Array(data[3 * i + 2], spectralDataZ, 4 * i);
+    }
+
+    const visualSpectrumX = new THREE.DataTexture(spectralDataX, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    visualSpectrumX.magFilter = THREE.NearestFilter;
+    visualSpectrumX.minFilter = THREE.NearestFilter;
+    visualSpectrumX.wrapS = THREE.ClampToEdgeWrapping;
+    visualSpectrumX.wrapT = THREE.ClampToEdgeWrapping;
+    visualSpectrumX.needsUpdate = true;
+
+    const visualSpectrumY = new THREE.DataTexture(spectralDataY, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    visualSpectrumY.magFilter = THREE.NearestFilter;
+    visualSpectrumY.minFilter = THREE.NearestFilter;
+    visualSpectrumY.wrapS = THREE.ClampToEdgeWrapping;
+    visualSpectrumY.wrapT = THREE.ClampToEdgeWrapping;
+    visualSpectrumY.needsUpdate = true;
+
+    const visualSpectrumZ = new THREE.DataTexture(spectralDataZ, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    visualSpectrumZ.magFilter = THREE.NearestFilter;
+    visualSpectrumZ.minFilter = THREE.NearestFilter;
+    visualSpectrumZ.wrapS = THREE.ClampToEdgeWrapping;
+    visualSpectrumZ.wrapT = THREE.ClampToEdgeWrapping;
+    visualSpectrumZ.needsUpdate = true;
+
+    return {
+        visualSpectrumX,
+        visualSpectrumY,
+        visualSpectrumZ
+    };
+}
+
 export async function loadVisualSpectrum(csvFile) {
     let threeJSData = [];
 
@@ -142,105 +215,9 @@ export async function loadVisualSpectrum(csvFile) {
     return visualSpectrum;
 }
 
-/*
-export function loadVisualSpectrum(csvFile) {
-
-    const spectrumWidth = 3200;
-    const spectralData = new Float32Array(spectrumWidth * 4);
-    for (let i = 0; i < spectrumWidth; i++) {
-        spectralData[4 * i] = i / spectrumWidth * 1;
-        spectralData[4 * i + 1] = 0;
-        spectralData[4 * i + 2] = 0;
-        spectralData[4 * i + 3] = 1; // Alpha channel
-    }
-
-    // Create the data texture
-    const visualSpectrum = new THREE.DataTexture(spectralData, spectrumWidth, 1, THREE.RGBAFormat, THREE.FloatType);
-    visualSpectrum.magFilter = THREE.LinearFilter; // This allows linear interpolation
-    visualSpectrum.needsUpdate = true;
-
-    return visualSpectrum;
-}*/
-
-/*
-export function loadVisualSpectrum(csvFile) {
-
-    const spectrumWidth = 3200;
-    const spectralData = new Uint8Array(spectrumWidth * 4);
-    for (let i = 0; i < spectrumWidth; i++) {
-        spectralData[4 * i] = Math.floor( i / spectrumWidth * 255 );
-        spectralData[4 * i + 1] = 0;
-        spectralData[4 * i + 2] = 0;
-        spectralData[4 * i + 3] = 255; // Alpha channel
-    }
-
-    // Create the data texture
-    const visualSpectrum = new THREE.DataTexture(spectralData, spectrumWidth, 1);
-    visualSpectrum.magFilter = THREE.LinearFilter; // This allows linear interpolation
-    visualSpectrum.needsUpdate = true;
-
-    return visualSpectrum;
-}*/
-
-/*
-export async function loadVisualSpectrum(csvFile) {
-    let threeJSData = [];
-
-    // Await the asynchronous loading and processing of the CSV file
-    const data = await d3.csv(csvFile);
-    let modifiedData = data.slice(0, 3200); // 390.0 to 709.9
-    modifiedData.forEach((row) => {
-        threeJSData.push(parseFloat(row.X), parseFloat(row.Y), parseFloat(row.Z));
-    });
-
-    const spectrumWidth = threeJSData.length / 3;
-    const spectralData = new Uint8Array(spectrumWidth * 4);
-    for (let i = 0; i < spectrumWidth; i++) {
-        spectralData[4 * i] = Math.floor( threeJSData[3 * i] * 255 );
-        spectralData[4 * i + 1] = Math.floor( threeJSData[3 * i + 1] * 255 );
-        spectralData[4 * i + 2] = Math.floor( threeJSData[3 * i + 2] * 255 );
-        spectralData[4 * i + 3] = 1; // Alpha channel
-    }
-
-    // Create the data texture
-    const visualSpectrum = new THREE.DataTexture(spectralData, spectrumWidth, 1);
-    visualSpectrum.magFilter = THREE.LinearFilter; // This allows linear interpolation
-    visualSpectrum.needsUpdate = true;
-
-    return visualSpectrum;
-}*/
-
-/*
-export async function loadVisualSpectrum(csvFile) {
-    let threeJSData = [];
-
-    // Await the asynchronous loading and processing of the CSV file
-    const data = await d3.csv(csvFile);
-    let modifiedData = data.slice(0, 300); // 390.0 to 709.9
-    modifiedData.forEach((row) => {
-        threeJSData.push(parseFloat(row.X), parseFloat(row.Y), parseFloat(row.Z));
-    });
-
-    const spectrumWidth = threeJSData.length / 3;
-    const spectralData = new Float32Array(spectrumWidth * 4);
-    for (let i = 0; i < spectrumWidth; i++) {
-        spectralData[4 * i] = threeJSData[3 * i] * 1;
-        spectralData[4 * i + 1] = threeJSData[3 * i + 1] * 1;
-        spectralData[4 * i + 2] = threeJSData[3 * i + 2] * 1;
-        spectralData[4 * i + 3] = 1; // Alpha channel
-    }
-
-    // Create the data texture
-    const visualSpectrum = new THREE.DataTexture(spectralData, spectrumWidth, 1, THREE.RGBAFormat, THREE.FloatType);
-    visualSpectrum.magFilter = THREE.LinearFilter; // This allows linear interpolation
-    visualSpectrum.needsUpdate = true;
-
-    return visualSpectrum;
-}*/
-
 function packFloatToUint8Array(value, array, index) {
     const floatView = new Float32Array(1);
-    const intView = new Uint32Array(floatView.buffer);
+    //const intView = new Uint32Array(floatView.buffer);
     const byteView = new Uint8Array(floatView.buffer);
 
     floatView[0] = value;
@@ -250,31 +227,6 @@ function packFloatToUint8Array(value, array, index) {
     array[index + 2] = byteView[1];
     array[index + 3] = byteView[0];
 }
-
-function packFloatToVec4i2(value) {
-    value = new Float32Array([value])[0];
-    var msk = 1/256;
-    var bitSh = [16777216, 65536, 256.0, 1.0];
-    var bitMsk = [0.0, msk, msk, msk];
-    var shifted = [value*bitSh[0]%1,value*bitSh[1]%1,value*bitSh[2]%1,value*bitSh[3]%1];    
-    var masked = [shifted[0]*bitMsk[0],shifted[0]*bitMsk[1],shifted[1]*bitMsk[2],shifted[2]*bitMsk[3]];    
-    var res = [Math.round((shifted[0]-masked[0])*255),Math.round((shifted[1]-masked[1])*255),Math.round((shifted[2]-masked[2])*255),Math.round((shifted[3]-masked[3])*255)];
-    return res;
-};
-
-function packFloatToVec4i(value, array, index) {
-    value = new Float32Array([value])[0];
-    var msk = 1/256;
-    var bitSh = [16777216, 65536, 256.0, 1.0];
-    var bitMsk = [0.0, msk, msk, msk];
-    var shifted = [value*bitSh[0]%1,value*bitSh[1]%1,value*bitSh[2]%1,value*bitSh[3]%1];    
-    var masked = [shifted[0]*bitMsk[0],shifted[0]*bitMsk[1],shifted[1]*bitMsk[2],shifted[2]*bitMsk[3]];    
-
-    array[index] = Math.round((shifted[0]-masked[0])*255);
-    array[index + 1] = Math.round((shifted[1]-masked[1])*255);
-    array[index + 2] = Math.round((shifted[2]-masked[2])*255);
-    array[index + 3] = Math.round((shifted[3]-masked[3])*255);
-};
 
 export async function loadVisualSpectrum2(csvFile) {
     let threeJSData = [];
