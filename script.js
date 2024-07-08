@@ -158,7 +158,7 @@ function drawAxis() {
 }
 
 async function initializeVisualSpectrum(environment, canvasName, divName) {
-    initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
+    /*initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
     environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
 
     await addShaderOverlay(environment, 
@@ -180,13 +180,17 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
     
     //document.getElementById("top-left").innerHTML = "hello";
 
-    /*
+    */
+
+    
     try {
         // Initialize environment with canvas and div elements
         initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
 
         // Load visual spectrum and assign it to environment
         environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
+
+        document.getElementById("top-left").innerHTML = "hello";
 
         // Add shader overlay to the environment
         await addShaderOverlay(environment, 
@@ -215,7 +219,7 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
             console.error(`Error: ${error.message}`);
         }
     }
-        */
+
 }
 
 async function initObjects() {
