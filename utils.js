@@ -137,6 +137,11 @@ export async function loadVisualSpectrum(csvFile) {
     // Create the data texture
     const visualSpectrum = new THREE.DataTexture(spectralData, spectrumWidth, 1, THREE.RGBAFormat, THREE.FloatType);
     visualSpectrum.magFilter = THREE.LinearFilter; // This allows linear interpolation
+
+    visualSpectrum.minFilter = THREE.LinearFilter;
+    visualSpectrum.wrapS = THREE.ClampToEdgeWrapping;
+    visualSpectrum.wrapT = THREE.ClampToEdgeWrapping;
+    
     visualSpectrum.needsUpdate = true;
 
     return visualSpectrum;
