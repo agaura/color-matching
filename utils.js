@@ -1,5 +1,15 @@
 import * as THREE from 'three';
 
+export function getElementOffset(element) {
+    let top = 0, left = 0;
+    while (element) {
+        top += element.offsetTop - element.scrollTop + element.clientTop;
+        left += element.offsetLeft - element.scrollLeft + element.clientLeft;
+        element = element.offsetParent;
+    }
+    return { top, left };
+}
+
 export function getPath(fileName) {
     const host = window.location.hostname;
     const isGitHub = host.includes('github.io');
@@ -23,6 +33,7 @@ export async function loadShader(url) {
     return response.text();
 }
 
+/*
 export async function initializeEnvironment(environment, container) {
 
     // Create scene
@@ -44,17 +55,19 @@ export async function initializeEnvironment(environment, container) {
 
     // Resize
     var rect = container.getBoundingClientRect();
-    environment.canvas.style.top = `${rect.top}px`;
-    environment.canvas.style.left = `${rect.left}px`;
+    let { top, left } = getElementOffset(container);
+    environment.canvas.style.top = `${top}px`;
+    environment.canvas.style.left = `${left}px`;
     environment.renderer.setSize(rect.width, rect.height);
 
     window.addEventListener('resize', () => {
         rect = container.getBoundingClientRect();
-        environment.canvas.style.top = `${rect.top}px`;
-        environment.canvas.style.left = `${rect.left}px`;
+        let { top, left } = getElementOffset(container);
+        environment.canvas.style.top = `${top}px`;
+        environment.canvas.style.left = `${left}px`;
         environment.renderer.setSize(rect.width, rect.height);
     });
-}
+}*/
 
 export function initEnvironment(environment, canvasElement, container) {
 
@@ -80,14 +93,16 @@ export function initEnvironment(environment, canvasElement, container) {
 
     // Resize
     var rect = container.getBoundingClientRect();
-    environment.canvas.style.top = `${rect.top}px`;
-    environment.canvas.style.left = `${rect.left}px`;
+    let { top, left } = getElementOffset(container);
+    environment.canvas.style.top = `${top}px`;
+    environment.canvas.style.left = `${left}px`;
     environment.renderer.setSize(rect.width, rect.height);
 
     window.addEventListener('resize', () => {
         rect = container.getBoundingClientRect();
-        environment.canvas.style.top = `${rect.top}px`;
-        environment.canvas.style.left = `${rect.left}px`;
+        let { top, left } = getElementOffset(container);
+        environment.canvas.style.top = `${top}px`;
+        environment.canvas.style.left = `${left}px`;
         environment.renderer.setSize(rect.width, rect.height);
     });
 }

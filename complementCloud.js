@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { lookupTable } from './coordinates.js';
-import { loadShader, createPointCube, loadVisualSpectrumArray, loadTextureFromArray, loadTexturesFromArray, getPath } from './utils.js';
+import { loadShader, createPointCube, loadVisualSpectrumArray, loadTextureFromArray, loadTexturesFromArray, getPath, getElementOffset } from './utils.js';
 import { Motion } from './motion.js';
 
 export class ComplementCloud {
@@ -196,14 +196,16 @@ export class ComplementCloud {
     // TODO: I might be able to fix this so that the canvas doesn't need to overly a container, and just have the canvas do everything on its own in CSS
     enableResize(container) {
         var rect = container.getBoundingClientRect();
-        this.canvas.style.top = `${rect.top}px`;
-        this.canvas.style.left = `${rect.left}px`;
+        let { top, left } = getElementOffset(container);
+        this.canvas.style.top = `${top}px`;
+        this.canvas.style.left = `${left}px`;
         this.renderer.setSize(rect.width, rect.height);
     
         window.addEventListener('resize', () => {
             rect = container.getBoundingClientRect();
-            this.canvas.style.top = `${rect.top}px`;
-            this.canvas.style.left = `${rect.left}px`;
+            let { top, left } = getElementOffset(container);
+            this.canvas.style.top = `${top}px`;
+            this.canvas.style.left = `${left}px`;
             this.renderer.setSize(rect.width, rect.height);
 
             // note, there are 3603/3 points in the complement spectral band, and 9600/3 in the regular one

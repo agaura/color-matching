@@ -198,7 +198,7 @@ async function initObjects() {
     await initializeColorMatching(environments.colorMatching,'colorMatching','colorMatchingDiv');
     initializeSliders('#sliders', 0.717955252861182, 0.6260300163584603,
         environments.complementCloud,
-        environments.colorMatching.composer.passes[1].uniforms.sliderColor.value
+        environments.visualSpectrum.spectrum
         );
     setUpMatching(environments.visualSpectrum.spectrum, 'visualSpectrum', environments.colorMatching, environments.complementCloud);
 
