@@ -24,12 +24,12 @@ export class Motion {
 	constructor(object, canvas) {
 		this.#object = object;
 
-        canvas.addEventListener("pointerdown", this.#start.bind(this), false);
-        document.addEventListener("pointermove", this.#moveWhileHold.bind(this), false);
-        document.addEventListener("pointerup", this.#release.bind(this), false);
-		canvas.addEventListener("touchstart", this.#start.bind(this), false);
-        document.addEventListener("touchmove", this.#moveWhileHold.bind(this), false);
-        document.addEventListener("touchend", this.#release.bind(this), false);
+        canvas.addEventListener("pointerdown", this.#start.bind(this), { passive: false });
+        document.addEventListener("pointermove", this.#moveWhileHold.bind(this), { passive: false });
+        document.addEventListener("pointerup", this.#release.bind(this), { passive: false });
+		//canvas.addEventListener("touchstart", this.#start.bind(this), { passive: false });
+        //document.addEventListener("touchmove", this.#moveWhileHold.bind(this), { passive: false });
+        //document.addEventListener("touchend", this.#release.bind(this), { passive: false });
 	}
 
 	/**
@@ -46,6 +46,8 @@ export class Motion {
 		this.#mouseY = event.clientY;
 		this.#totalHorizontal = 0;
 		this.#totalVertical = 0;
+
+		console.log(this.#mouseX, this.#mouseY);
 	}
 
 	/**
