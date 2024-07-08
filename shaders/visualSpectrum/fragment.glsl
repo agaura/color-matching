@@ -58,7 +58,7 @@ void main() {
         gl_FragColor = vec4(displayableColor, 1.0);
     }
 
-    if (length(xyzColor) < 0.01) {
+    if (length(xyzColor) < 0.05) {
         gl_FragColor = vec4(1.0,0.0,0.0,1.0);
     }
     
