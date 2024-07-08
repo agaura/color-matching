@@ -143,6 +143,7 @@ export async function loadVisualSpectrum(csvFile) {
     return visualSpectrum;
 }*/
 
+/*
 export function loadVisualSpectrum(csvFile) {
 
     const spectrumWidth = 3200;
@@ -156,6 +157,25 @@ export function loadVisualSpectrum(csvFile) {
 
     // Create the data texture
     const visualSpectrum = new THREE.DataTexture(spectralData, spectrumWidth, 1, THREE.RGBAFormat, THREE.FloatType);
+    visualSpectrum.magFilter = THREE.LinearFilter; // This allows linear interpolation
+    visualSpectrum.needsUpdate = true;
+
+    return visualSpectrum;
+}*/
+
+export function loadVisualSpectrum(csvFile) {
+
+    const spectrumWidth = 3200;
+    const spectralData = new Uint8Array(spectrumWidth * 4);
+    for (let i = 0; i < spectrumWidth; i++) {
+        spectralData[4 * i] = Math.floor( i / spectrumWidth * 255 );
+        spectralData[4 * i + 1] = 0;
+        spectralData[4 * i + 2] = 0;
+        spectralData[4 * i + 3] = 255; // Alpha channel
+    }
+
+    // Create the data texture
+    const visualSpectrum = new THREE.DataTexture(spectralData, spectrumWidth, 1);
     visualSpectrum.magFilter = THREE.LinearFilter; // This allows linear interpolation
     visualSpectrum.needsUpdate = true;
 
