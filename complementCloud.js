@@ -60,7 +60,7 @@ export class ComplementCloud {
         this.matchesDrawn = 9600/3;
         this.spectrum.geometry.attributes.position.needsUpdate = true;
 
-        let spectrum = await this.spectralLine;
+        let spectrum = await this.spectralLine; // this await is necessary, at least on mobile
     
         for (let i = 0; i < this.matchesDrawn; i++) {
             this.spectrum.geometry.attributes.position.setXYZ(i,
