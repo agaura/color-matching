@@ -240,9 +240,9 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
                 gray: { value: 0.6260300163584603 },
                 scale: {value: 2.1230881684358494},
                 spectrum: {value: environment.spectrum},
-                spectrumR: {value: spectra.visualSpectrumR},
-                spectrumG: {value: spectra.visualSpectrumG},
-                spectrumB: {value: spectra.visualSpectrumB}
+                spectrumX: {value: spectra.visualSpectrumX},
+                spectrumY: {value: spectra.visualSpectrumY},
+                spectrumZ: {value: spectra.visualSpectrumZ}
             },
             getPath('shaders/visualSpectrum/vertex.glsl'),
             getPath('shaders/visualSpectrum/fragment.glsl'));

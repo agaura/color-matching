@@ -277,13 +277,6 @@ function packFloatToVec4i(value, array, index) {
 };
 
 export async function loadVisualSpectrum2(csvFile) {
-    //console.log(packFloatToVec4i2(0.4242));
-    // Example usage
-    const spectralDataRr = new Uint8Array(4);
-    packFloatToUint8Array(0.4242, spectralDataRr, 0);
-
-    console.log(spectralDataRr); // Should output: [62, 217, 48, 190]
-
     let threeJSData = [];
 
     const data = await d3.csv(csvFile);
@@ -293,44 +286,40 @@ export async function loadVisualSpectrum2(csvFile) {
     });
 
     const spectrumWidth = threeJSData.length / 3;
-    const spectralDataR = new Uint8Array(spectrumWidth * 4);
-    const spectralDataG = new Uint8Array(spectrumWidth * 4);
-    const spectralDataB = new Uint8Array(spectrumWidth * 4);
+    const spectralDataX = new Uint8Array(spectrumWidth * 4);
+    const spectralDataY = new Uint8Array(spectrumWidth * 4);
+    const spectralDataZ = new Uint8Array(spectrumWidth * 4);
 
     for (let i = 0; i < spectrumWidth; i++) {
-        packFloatToUint8Array(threeJSData[3 * i], spectralDataR, 4 * i);
-        packFloatToUint8Array(threeJSData[3 * i + 1], spectralDataG, 4 * i);
-        packFloatToUint8Array(threeJSData[3 * i + 2], spectralDataB, 4 * i);
+        packFloatToUint8Array(threeJSData[3 * i], spectralDataX, 4 * i);
+        packFloatToUint8Array(threeJSData[3 * i + 1], spectralDataY, 4 * i);
+        packFloatToUint8Array(threeJSData[3 * i + 2], spectralDataZ, 4 * i);
     }
 
-    console.log('spectralDataR', spectralDataR.slice(1000, 1016)); // Log first few values
-    console.log('spectralDataG', spectralDataG.slice(1000, 1016)); // Log first few values
-    console.log('spectralDataB', spectralDataB.slice(1000, 1016)); // Log first few values
+    const visualSpectrumX = new THREE.DataTexture(spectralDataX, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    visualSpectrumX.magFilter = THREE.NearestFilter;
+    visualSpectrumX.minFilter = THREE.NearestFilter;
+    visualSpectrumX.wrapS = THREE.ClampToEdgeWrapping;
+    visualSpectrumX.wrapT = THREE.ClampToEdgeWrapping;
+    visualSpectrumX.needsUpdate = true;
 
-    const visualSpectrumR = new THREE.DataTexture(spectralDataR, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
-    visualSpectrumR.magFilter = THREE.LinearFilter;
-    visualSpectrumR.minFilter = THREE.LinearFilter;
-    visualSpectrumR.wrapS = THREE.ClampToEdgeWrapping;
-    visualSpectrumR.wrapT = THREE.ClampToEdgeWrapping;
-    visualSpectrumR.needsUpdate = true;
+    const visualSpectrumY = new THREE.DataTexture(spectralDataY, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    visualSpectrumY.magFilter = THREE.NearestFilter;
+    visualSpectrumY.minFilter = THREE.NearestFilter;
+    visualSpectrumY.wrapS = THREE.ClampToEdgeWrapping;
+    visualSpectrumY.wrapT = THREE.ClampToEdgeWrapping;
+    visualSpectrumY.needsUpdate = true;
 
-    const visualSpectrumG = new THREE.DataTexture(spectralDataG, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
-    visualSpectrumG.magFilter = THREE.LinearFilter;
-    visualSpectrumG.minFilter = THREE.LinearFilter;
-    visualSpectrumG.wrapS = THREE.ClampToEdgeWrapping;
-    visualSpectrumG.wrapT = THREE.ClampToEdgeWrapping;
-    visualSpectrumG.needsUpdate = true;
-
-    const visualSpectrumB = new THREE.DataTexture(spectralDataB, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
-    visualSpectrumB.magFilter = THREE.LinearFilter;
-    visualSpectrumB.minFilter = THREE.LinearFilter;
-    visualSpectrumB.wrapS = THREE.ClampToEdgeWrapping;
-    visualSpectrumB.wrapT = THREE.ClampToEdgeWrapping;
-    visualSpectrumB.needsUpdate = true;
+    const visualSpectrumZ = new THREE.DataTexture(spectralDataZ, spectrumWidth, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    visualSpectrumZ.magFilter = THREE.NearestFilter;
+    visualSpectrumZ.minFilter = THREE.NearestFilter;
+    visualSpectrumZ.wrapS = THREE.ClampToEdgeWrapping;
+    visualSpectrumZ.wrapT = THREE.ClampToEdgeWrapping;
+    visualSpectrumZ.needsUpdate = true;
 
     return {
-        visualSpectrumR,
-        visualSpectrumG,
-        visualSpectrumB
+        visualSpectrumX,
+        visualSpectrumY,
+        visualSpectrumZ
     };
 }

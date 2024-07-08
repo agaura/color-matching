@@ -17,6 +17,13 @@ float srgb_transfer_function_inv(float a)
     return .04045f < a ? pow((a + .055f) / 1.055f, 2.4f) : a / 12.92f;
 }
 
+vec3 srgb_transfer_function_inv(vec3 a)
+{
+    return vec3(srgb_transfer_function_inv(a.x),
+        srgb_transfer_function_inv(a.y),
+        srgb_transfer_function_inv(a.z));
+}
+
 mat3 p3_to_XYZ = transpose(mat3(
     0.4865709,  0.2656677,  0.1982173,
     0.2289746,  0.6917385,  0.0792869,
