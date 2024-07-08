@@ -204,7 +204,7 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
         const gl = environment.renderer.getContext();
         checkGLError(gl); // Check for errors after context creation
 
-        document.getElementById("top-left").innerHTML = environment.spectrum.source.data.data.slice(0,4);
+        //document.getElementById("top-left").innerHTML = environment.spectrum.source.data.data.slice(0,4);
 
         await addShaderOverlay(environment, 
             {
