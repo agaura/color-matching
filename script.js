@@ -199,7 +199,7 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
         }
 
         initEnvironment(environment, canvas, div);
-        environment.spectrum = await loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
+        environment.spectrum = loadVisualSpectrum(getPath('lin2012xyz2e_fine_7sf.csv'));
 
         const gl = environment.renderer.getContext();
         checkGLError(gl); // Check for errors after context creation
@@ -213,7 +213,7 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
                 alpha: { value: 0.717955252861182 },
                 gray: { value: 0.6260300163584603 },
                 scale: {value: 2.1230881684358494},
-                spectrum: {value: environment.spectrum}
+                spectrum: {value: await environment.spectrum}
             },
             getPath('shaders/visualSpectrum/vertex.glsl'),
             getPath('shaders/visualSpectrum/fragment.glsl'));
