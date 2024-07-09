@@ -121,8 +121,8 @@ void main() {
     else if ((pos.x > combiningBox) && (pos.x < combiningBox+1.)) {
         gl_FragColor = vec4(finalColor, 1.);
 
-        /*
-        float mixing = 1.-pow((sin(time/100. + 3.14*2.*rand(100.*vUv)) + 1.)/2.,0.25);
+        
+        float mixing = 1.-pow((sin(time/30. + 3.14*2.*rand(100.*vUv)) + 1.)/2.,0.25);
         //vec3 equalEnergyGray = srgb_transfer_function(XYZ_to_p3*vec3(clamp(0.,1.,sliderColor.x)));
         //vec3 channel = srgb_transfer_function(vec3(1.,0.,0.));
         //vec3 trueColor = srgb_transfer_function(potentialMultiplier*mix(equalEnergyGray,channel,mixing));
@@ -133,7 +133,7 @@ void main() {
         vec3 chromaticityMix = mix(equalEnergyGray, channel, mixing);
         vec3 trueColor = srgb_transfer_function(XYZ_to_p3*xyY_to_XYZ(chromaticityMix));
 
-        gl_FragColor = vec4(trueColor,1.);*/
+        gl_FragColor = vec4(trueColor,1.);
     }
     else if ((pos.x > matchingBox) && (pos.x < matchingBox+1.)) {
         gl_FragColor = vec4(finalColor, 1.);
