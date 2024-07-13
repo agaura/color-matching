@@ -81,10 +81,10 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
-    touch-action: none
-    /*filter: brightness(1.36);*/
+    touch-action: none;
+    filter: brightness(pow(2.0,1/2.4)); /* brightness multiples colors post gamma */
     /*filter: blur(1px);*/
-    image-rendering: pixelated;
+    image-rendering: auto;
 }
 
 button {
@@ -149,13 +149,13 @@ button {
     position: fixed; /* Use fixed or absolute positioning */
     right: 0;
     bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
+    max-width: 1%;
+    max-height: 1%;
     width: auto;
     height: auto;
     z-index: 100;
     background-size: cover;
     overflow: hidden;
     pointer-events: none; /* Disables mouse interactions */
-    filter: opacity(0%);
+    filter: opacity(100%);
 }

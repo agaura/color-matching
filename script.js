@@ -167,8 +167,8 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
         {
             tDiffuse: { value: null }, // tDiffuse is the texture of the rendered scene
             time: { value: .0 },
-            alpha: { value: 0.717955252861182 },
-            gray: { value: 0.6260300163584603 },
+            alpha: { value: 0.717955252861182 }, // 0.7715569276056665 for greatest diversity
+            gray: { value: 0.6260300163584603 }, // 0.8015956245904453 for greatest diversity
             scale: {value: 2.1230881684358494},
             //spectrum: {value: environment.spectrum},
             spectrumX: {value: spectra.X},
