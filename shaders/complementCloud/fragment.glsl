@@ -12,12 +12,21 @@ void paint_complement_cloud() {
     vec3 gray = vec3(0.3277935806611292);
 
     vec3 linearResult = mix(gray, p3_color, alpha);
+    vec3 real_p3 = p3_color/whitepoint_scale;
     bool cubeVisible = (mode == 7) ||
         (mode == 8) ||
         (mode == 9);
-    if ((clamp(p3_color/whitepoint_scale,0.,1.) == p3_color/whitepoint_scale) && cubeVisible) {
+    if ((clamp(real_p3,0.,1.) == real_p3) && cubeVisible) {
         linearResult = p3_color/whitepoint_scale;
     }
+
+    /*
+    vec3 xyY_color = XYZ_to_xyY(xyz_color);
+    vec3 XXXXX = XYZ_to_p3*xyY_to_XYZ(vec3(xyY_color.xy, 1.0));
+    if ((min(min(XXXXX.x, XXXXX.y),XXXXX.z) > 0.0) && ((min(min(real_p3.x, real_p3.y),real_p3.z) < 0.0) || (max(max(real_p3.x, real_p3.y),real_p3.z) > 1.0))) {
+        linearResult = vec3(vary(0.,1.,time/100.),vary(0.,1.,time/100. + 3.14*2./3.),vary(0.,1.,time/100. + 3.14*4./3.));
+        linearResult = (2. * p3_color - mix(p3_color, XXXXX, 0.5)) / whitepoint_scale;
+    }*/
 
     gl_FragColor.rgb = srgb_transfer_function(linearResult);
     gl_FragColor.a = 1.;

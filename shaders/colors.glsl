@@ -49,6 +49,22 @@ mat3 sRGB_to_XYZ = transpose(mat3(
     0.0193339,  0.1191920,  0.9503041
     ));
 
+vec3 XYZ_to_xyY(vec3 c) {
+    return vec3(c.x / (c.x + c.y + c.z),
+        c.y / (c.x + c.y + c.z),
+        c.y);
+}
+
+vec3 xyY_to_XYZ(vec3 c) {
+    return vec3(c.x * c.z / c.y,
+        c.z,
+        (1. - c.x - c.y) * c.z / c.y);
+}
+
+float vary(float a, float b, float freq) {
+    return mix(a, b, sin(freq) / 2. + 0.5);
+}
+
 // these rotations have to be redone at some point because I believe they need to be transposed
 mat3 rotateX(float theta) {
     return mat3(
@@ -87,9 +103,11 @@ float unpackUint8ToFloat(vec4 value) {
 // this is necessary because the automatic linear filtering in the javascript seems to have some issues with packed textures
 vec3 linearFilterPackedTexture(sampler2D x, sampler2D y, sampler2D z, vec2 uv, float width) {
 
-    float alpha = fract(uv.x * width);
-    vec2 left = vec2(uv.x - alpha / width, uv.y);
-    vec2 right = vec2(uv.x + (1. - alpha) / width, uv.y);
+    float widthAdjusted = width - 1.0;
+
+    float alpha = fract(uv.x * widthAdjusted);
+    vec2 left = vec2(uv.x - alpha / widthAdjusted, uv.y);
+    vec2 right = vec2(uv.x + (1. - alpha) / widthAdjusted, uv.y);
 
     vec3 leftPixel = vec3(unpackUint8ToFloat(texture2D(x, left)),
         unpackUint8ToFloat(texture2D(y, left)),

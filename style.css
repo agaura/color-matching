@@ -73,6 +73,8 @@ body, html {
 
 #sliders {
     text-align: center;
+    /* filter: brightness(pow(2.0, 1/2.4));
+    -webkit-backdrop-filter: brightness(calc(1/pow(2.0,1/2.4))); /* the webkit part is necessary as backdrop filter is experimental in chrome, and we need the backdrop filter in general so that the whole scene is interpreted in HDR. I don't know why it should work that way but it does*/
 }
 
 canvas {
@@ -82,7 +84,7 @@ canvas {
     width: 100%;
     height: 100%;
     touch-action: none;
-    /*filter: brightness(pow(2.0,1/2.4));*/ /* brightness multiples colors post gamma */
+    /* filter: brightness(pow(2.0,1/2.4)); /* brightness multiples colors post gamma */
     /*filter: blur(1px);*/
     image-rendering: auto;
 }
