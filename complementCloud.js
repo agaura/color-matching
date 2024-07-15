@@ -125,9 +125,9 @@ export class ComplementCloud {
         const baseSpectrumVertexShader = await loadShader('shaders/complementCloud/spectrumVertex.glsl');
         const baseFragmentShader = await loadShader('shaders/complementCloud/fragment.glsl');
 
-        const vertexShader = colorShader + randomShader + placementShader + baseVertexShader;
-        const spectrumVertexShader = colorShader + randomShader + placementShader + baseSpectrumVertexShader;
-        const fragmentShader = colorShader + baseFragmentShader;
+        const vertexShader = randomShader + colorShader + placementShader + baseVertexShader;
+        const spectrumVertexShader = randomShader + colorShader + placementShader + baseSpectrumVertexShader;
+        const fragmentShader = randomShader + colorShader + baseFragmentShader;
     
         // Create materials
         const colorSpaceMaterial = this.createShaderMaterial(vertexShader,fragmentShader, 0);

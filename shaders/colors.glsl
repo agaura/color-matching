@@ -1,4 +1,6 @@
 #define M_PI 3.1415926535897932384626433832795
+//#define MATCH_TYPE(x, y) (step(x, x) * y)
+//#define srgb_transfer_function(x) (step(.0031308, x) * (1.055 * pow(x, MATCH_TYPE(x,.4166666666666667)) - 0.055 - 12.92 * x) + 12.92 * x)
 
 float srgb_transfer_function(float a)
 {
@@ -119,6 +121,30 @@ vec3 linearFilterPackedTexture(sampler2D x, sampler2D y, sampler2D z, vec2 uv, f
 
     return mix(leftPixel, rightPixel, alpha);
 }
+
+vec3 make_displayable(vec3 P3_Linear_color, vec2 coord, float time) {
+
+    vec3 displayableColor = srgb_transfer_function(P3_Linear_color);
+
+    vec3 colorLinear = srgb_transfer_function_inv(displayableColor);
+    vec3 floors = floor(255. * displayableColor) / 255.;
+    vec3 floorsLinear = srgb_transfer_function_inv(floors);
+    vec3 ceils = ceil(255. * displayableColor) / 255.;
+    vec3 ceilsLinear = srgb_transfer_function_inv(ceils);
+    vec3 thresholds = (P3_Linear_color - floorsLinear) / (ceilsLinear - floorsLinear);
+    vec3 rands = randomizer3(vec3(coord, rand(coord)), time);
+
+    vec3 ditheredColor = vec3(0.);
+    if (rands.r < thresholds.r) {ditheredColor.r = ceils.r;}
+    else {ditheredColor.r = floors.r;}
+    if (rands.g < thresholds.g) {ditheredColor.g = ceils.g;}
+    else {ditheredColor.g = floors.g;}
+    if (rands.b < thresholds.b) {ditheredColor.b = ceils.b;}
+    else {ditheredColor.b = floors.b;}
+
+    return ditheredColor;
+}
+
 
 
 

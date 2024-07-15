@@ -34,6 +34,21 @@ async function addShaderOverlay(environment, uniforms, vertexFile, fragmentFile)
     environment.composer.addPass(pass);
 }
 
+async function addShaderOverlay2(environment, uniforms, vertex, fragment) {
+    environment.composer = new EffectComposer(environment.renderer);
+    environment.composer.addPass(new RenderPass(environment.scene, environment.camera));
+
+    const shader = {
+        uniforms: uniforms,
+        vertexShader: vertex,
+        fragmentShader: fragment
+    };
+    
+    const pass = new ShaderPass(shader);
+    environment.composer.addPass(pass);
+}
+
+
 const XYZtoRGB1931 = new THREE.Matrix3().set(8041697/3400850, -3049000/3400850, -1591847/3400850,
     -1752003/3400850, 4851000/3400850, 301853/3400850,
     17697/3400850, -49000/3400850, 3432153/3400850);
@@ -163,20 +178,31 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
     const spectra = loadTexturesFromArray(await loadVisualSpectrumArray(getPath('lin2012xyz2e_fine_7sf.csv')));
     //const spectra = await loadVisualSpectrum2(getPath('lin2012xyz2e_fine_7sf.csv'));
 
-    await addShaderOverlay(environment, 
+     // Get shaders
+     const colorShader = await loadShader('shaders/colors.glsl');
+     const randomShader = await loadShader('shaders/random.glsl');
+     const placementShader = await loadShader('shaders/complementCloud/placement.glsl');
+     const baseVertexShader = await loadShader('shaders/visualSpectrum/vertex.glsl');
+     const baseSpectrumVertexShader = await loadShader('shaders/complementCloud/spectrumVertex.glsl');
+     const baseFragmentShader = await loadShader('shaders/visualSpectrum/fragment.glsl');
+
+     const vertexShader = baseVertexShader;
+     const fragmentShader = randomShader + colorShader + baseFragmentShader;
+
+    await addShaderOverlay2(environment, 
         {
             tDiffuse: { value: null }, // tDiffuse is the texture of the rendered scene
             time: { value: .0 },
             alpha: { value: 0.717955252861182 }, // 0.7715569276056665 for greatest diversity
             gray: { value: 0.6260300163584603 }, // 0.8015956245904453 for greatest diversity
-            scale: {value: 2.1230881684358494},
+            dimmingFactor: {value: 2.1230881684358494},
             //spectrum: {value: environment.spectrum},
             spectrumX: {value: spectra.X},
             spectrumY: {value: spectra.Y},
             spectrumZ: {value: spectra.Z}
         },
-        getPath('shaders/visualSpectrum/vertex.glsl'),
-        getPath('shaders/visualSpectrum/fragment.glsl'));
+        vertexShader,
+        fragmentShader);
 
     drawAxis(); // Add axis
     window.addEventListener('resize', drawAxis); // Redraw the axis on window resize
