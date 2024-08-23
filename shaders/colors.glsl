@@ -145,6 +145,32 @@ vec3 make_displayable(vec3 P3_Linear_color, vec2 coord, float time) {
     return ditheredColor;
 }
 
+// work on this still XXXXX, or maybe fix the regular transfer function
+vec3 make_displayable_HDR(vec3 P3_Linear_color, vec2 coord, float time) {
+
+    float scale = (pow(2., 1. / 2.4) - .052) / 0.948;
+
+    vec3 displayableColor = srgb_transfer_function(P3_Linear_color);
+
+    vec3 colorLinear = srgb_transfer_function_inv(displayableColor);
+    vec3 floors = floor(255. * displayableColor) / 255.;
+    vec3 floorsLinear = srgb_transfer_function_inv(round(scale * floors));
+    vec3 ceils = ceil(255. * displayableColor) / 255.;
+    vec3 ceilsLinear = srgb_transfer_function_inv(round(ceils * floors));
+    vec3 thresholds = (srgb_transfer_function_inv(scale * displayableColor) - floorsLinear) / (ceilsLinear - floorsLinear);
+    vec3 rands = randomizer3(vec3(coord, rand(coord)), time);
+
+    vec3 ditheredColor = vec3(0.);
+    if (rands.r < thresholds.r) {ditheredColor.r = ceils.r;}
+    else {ditheredColor.r = floors.r;}
+    if (rands.g < thresholds.g) {ditheredColor.g = ceils.g;}
+    else {ditheredColor.g = floors.g;}
+    if (rands.b < thresholds.b) {ditheredColor.b = ceils.b;}
+    else {ditheredColor.b = floors.b;}
+
+    return ditheredColor;
+}
+
 
 
 

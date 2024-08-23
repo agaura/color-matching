@@ -63,4 +63,5 @@ void main() {
     else {
         gl_FragColor = vec4(make_displayable(P3_Linear_projected_color, vUv, time), 1.0);
     }
+
 }
