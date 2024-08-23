@@ -41,10 +41,87 @@ vec3 push_into_displayable_XYZ_cloud(sampler2D spectrum, vec3 distribution) {
     return new_coord;
 }
 
+float adjustDensity(float x, float A_prime, float B_prime, float S) {
+    // Calculate A and B from A_prime and B_prime
+    float B = (B_prime - A_prime) / S + A_prime * (1.0 - (1.0 - S) * (B_prime - A_prime));
+    float A = A_prime * (1.0 - (1.0 - S) * (B - A_prime));
+
+    // Implement the piecewise function
+    if (x < A) {
+        return (A_prime / A) * x;
+    } else if (x < B) {
+        return A_prime + S * (x - A);
+    } else {
+        return B_prime + (1.0 - B_prime) / (1.0 - B) * (x - B);
+    }
+}
+
+float spread(float x, float a, float b) {
+
+    float p = 1.5;
+
+    if (x > a) {
+        if (x < b) {
+            float new_x = (x - a) / (b - a);
+
+            if (new_x < 0.5) {
+                new_x = pow((new_x * 2.0), p) / 2.0;
+            }
+            else {
+                new_x = 1. - pow((1.0 - (new_x - 0.5) * 2.0), p) / 2.0;
+            }
+
+            new_x = new_x * (b - a) + a;
+            new_x = mix(x, new_x, 1.0-(1./(b-a))*distance(x, (b + a)/ 2.));
+            return new_x;
+        }
+    }
+
+    return x;
+}
+
+// works well with distribution.z to remove the black-white pole
+float spread2(float x, float a, float b) {
+
+    float p = .25;
+
+    if (x > a) {
+        if (x < b) {
+            float new_x = (x - a) / (b - a);
+
+            if (new_x < 0.5) {
+                new_x = pow((new_x * 2.0), p) / 2.0;
+            }
+            else {
+                new_x = 1. - pow((1.0 - (new_x - 0.5) * 2.0), p) / 2.0;
+            }
+
+            new_x = new_x * (b - a) + a;
+            new_x = mix(x, new_x, 1.0-(1./(b-a))*distance(x, (b + a)/ 2.));
+            return new_x;
+        }
+    }
+
+    return x;
+}
+
 vec3 push_into_displayable_XYZ_cloud2(sampler2D x, sampler2D y, sampler2D z, vec3 distribution, float width) {
 
+    float redistribution = distribution.x * 2.0;
+    float a1 = 0.002*2.;
+    float a2 = 0.137*2.;
+    float addit = floor(redistribution);
+    redistribution = redistribution - addit;
+    redistribution = adjustDensity(redistribution, a1, a2, 0.675) + addit;
+    redistribution = redistribution / 2.;
+
+    /*
+    redistribution = spread(redistribution, 0.0, (0.143 + 0.5)/2.);
+    redistribution = spread(redistribution, (0.143 + 0.5)/2., 0.5 + 0.143);
+    redistribution = spread(redistribution, 0.5 + 0.143, 1.);*/
+
     // send distribution coordinates into cloud coordinates
-    vec3 v = linearFilterPackedTexture(x, y, z, vec2(distribution.x, 0.5), width);
+    vec3 v = linearFilterPackedTexture(x, y, z, vec2(redistribution, 0.5), width);
 
     // this one I think is actually prettier when you remove the belt
     vec3 new_coord = mix(v, vec3(distribution.y), pow(distribution.z,1.));

@@ -26,6 +26,14 @@ vec3 srgb_transfer_function_inv(vec3 a)
         srgb_transfer_function_inv(a.z));
 }
 
+//mat3 LMStoXYZ = transpose(mat3( 1.94735469, -1.41445123, 0.36476327,
+//    0.68990272,  0.34832189,  0.,
+//    0.,  0.,  1.93485343));
+
+//mat3 LMStoXYZ = inverse(transpose(mat3(0.4002, 0.7076, -0.0808,
+//    -0.2263,  1.1653,  0.0457,
+//    0.,  0.,  0.9182)));
+
 mat3 p3_to_XYZ = transpose(mat3(
     0.4865709,  0.2656677,  0.1982173,
     0.2289746,  0.6917385,  0.0792869,

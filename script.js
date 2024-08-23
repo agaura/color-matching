@@ -20,21 +20,7 @@ const environments = {
     visualSpectrum: {}
 }
 
-async function addShaderOverlay(environment, uniforms, vertexFile, fragmentFile) {
-    environment.composer = new EffectComposer(environment.renderer);
-    environment.composer.addPass(new RenderPass(environment.scene, environment.camera));
-
-    const shader = {
-        uniforms: uniforms,
-        vertexShader: await loadShader(vertexFile),
-        fragmentShader: await loadShader(fragmentFile)
-    };
-    
-    const pass = new ShaderPass(shader);
-    environment.composer.addPass(pass);
-}
-
-async function addShaderOverlay2(environment, uniforms, vertex, fragment) {
+async function addShaderOverlay(environment, uniforms, vertex, fragment) {
     environment.composer = new EffectComposer(environment.renderer);
     environment.composer.addPass(new RenderPass(environment.scene, environment.camera));
 
@@ -70,86 +56,115 @@ function fillSpectrum(spectrum, cloudEnvironment) {
 
 function checkMatch(spectrum, matchEnvironment, cloudEnvironment) {
     
-    const matchColor = matchEnvironment.composer.passes[1].uniforms.matchColor.value;
-    const convertedMatchColor = matchColor.clone().applyMatrix3(XYZtoRGB1931).divideScalar(2.1230881684358494);
-    const attemptColor = matchEnvironment.composer.passes[1].uniforms.sliderColor.value;
+    const XYZdefaultTargetColor = matchEnvironment.targetColor.value;
+    const XYZdisplayTargetColor = matchEnvironment.composer.passes[1].uniforms.XYZ_target_color.value;
+    const RGB1931displayTargetColor = XYZdisplayTargetColor.clone().applyMatrix3(XYZtoRGB1931).divideScalar(2.1230881684358494);
+    const RGB1931sliderColor = matchEnvironment.composer.passes[1].uniforms.RGB1931_slider_color.value;
 
-    if (convertedMatchColor.distanceTo(attemptColor) < 0.1) {
+    if (RGB1931displayTargetColor.distanceTo(RGB1931sliderColor) < 0.1) {
 
+        // add correct match to the cloud
         cloudEnvironment.spectrum.geometry.attributes.position.needsUpdate = true;
-        cloudEnvironment.spectrum.geometry.attributes.position.setXYZ(cloudEnvironment.matchesDrawn, matchColor.x, matchColor.y, matchColor.z);
+        cloudEnvironment.spectrum.geometry.attributes.position.setXYZ(cloudEnvironment.matchesDrawn, XYZdisplayTargetColor.x, XYZdisplayTargetColor.y, XYZdisplayTargetColor.z);
         cloudEnvironment.matchesDrawn++
         cloudEnvironment.spectrum.geometry.setDrawRange( 0, cloudEnvironment.matchesDrawn);
 
+        // find random color to match with
         const proportion = Math.random();
-        const i = 4*Math.round(proportion * (spectrum.image.data.length/4 - 1));
+        const i = 4 * Math.round(proportion * (spectrum.image.data.length/4 - 1));
 
-        matchColor.setX(spectrum.image.data[i]);
-        matchColor.setY(spectrum.image.data[i+1]);
-        matchColor.setZ(spectrum.image.data[i+2]);
+        // set default target color (used as memory for when hovering over the spectrum)
+        XYZdefaultTargetColor.set(
+            spectrum.image.data[i],
+            spectrum.image.data[i+1],
+            spectrum.image.data[i+2]);
 
-        matchEnvironment.matchColor.value.setX(spectrum.image.data[i]);
-        matchEnvironment.matchColor.value.setY(spectrum.image.data[i+1]);
-        matchEnvironment.matchColor.value.setZ(spectrum.image.data[i+2]);
+        // display the target color
+        XYZdisplayTargetColor.set(
+            spectrum.image.data[i],
+            spectrum.image.data[i+1],
+            spectrum.image.data[i+2]);
     }
 
 }
 
 function setUpMatching(spectrum, canvasName, matchingEnvironment, cloudEnvironment) {
     const canvas = document.getElementById(canvasName);
+    const XYZdisplayTargetColor = matchingEnvironment.composer.passes[1].uniforms.XYZ_target_color.value;
+    const XYZdefaultTargetColor = matchingEnvironment.targetColor.value;
 
+    // display as the target color whatever color is being hovered over
     canvas.addEventListener('mousemove', function(event) {
         const rect = canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const proportion = x / canvas.width;
         const i = 4*Math.round(proportion * (spectrum.image.data.length/4 - 1));
 
-        matchingEnvironment.composer.passes[1].uniforms.matchColor.value.setX(spectrum.image.data[i]);
-        matchingEnvironment.composer.passes[1].uniforms.matchColor.value.setY(spectrum.image.data[i+1]);
-        matchingEnvironment.composer.passes[1].uniforms.matchColor.value.setZ(spectrum.image.data[i+2]);
+        XYZdisplayTargetColor.set(
+            spectrum.image.data[i],
+            spectrum.image.data[i+1],
+            spectrum.image.data[i+2]);
     });
 
+    // set the target color to the color being hovered over when clicked upon
     canvas.addEventListener('pointerup', function() {
-        matchingEnvironment.matchColor.value.setX(matchingEnvironment.composer.passes[1].uniforms.matchColor.value.x);
-        matchingEnvironment.matchColor.value.setY(matchingEnvironment.composer.passes[1].uniforms.matchColor.value.y);
-        matchingEnvironment.matchColor.value.setZ(matchingEnvironment.composer.passes[1].uniforms.matchColor.value.z);
+        XYZdefaultTargetColor.set(
+            XYZdisplayTargetColor.x,
+            XYZdisplayTargetColor.y,
+            XYZdisplayTargetColor.z);
     });
 
+    // return the target color to its default color when no longer hovering
     canvas.addEventListener('mouseleave', function() {
-        matchingEnvironment.composer.passes[1].uniforms.matchColor.value.setX(matchingEnvironment.matchColor.value.x);
-        matchingEnvironment.composer.passes[1].uniforms.matchColor.value.setY(matchingEnvironment.matchColor.value.y);
-        matchingEnvironment.composer.passes[1].uniforms.matchColor.value.setZ(matchingEnvironment.matchColor.value.z);
+        XYZdisplayTargetColor.set(
+            XYZdefaultTargetColor.x,
+            XYZdefaultTargetColor.y,
+            XYZdefaultTargetColor.z);
     });
 
+    // when the match button is clicked, check if the slider color and target color match
     document.getElementById('matchBtn').addEventListener('click', () =>
         checkMatch(spectrum, matchingEnvironment, cloudEnvironment));
 
 }
 
 async function initializeColorMatching(environment, canvasName, divName) {
+
     initEnvironment(environment, document.getElementById(canvasName), document.getElementById(divName));
+
+    environment.targetColor = {
+        type: "3f",
+        value: new THREE.Vector3(0., 0., 0.)
+    };
+
+    // Get shaders
+    const colorShader = await loadShader('shaders/colors.glsl');
+    const randomShader = await loadShader('shaders/random.glsl');
+    const baseVertexShader = await loadShader('shaders/colorMatching/vertex.glsl');
+    const baseFragmentShader = await loadShader('shaders/colorMatching/fragment.glsl');
+
+    const vertexShader = baseVertexShader;
+    const fragmentShader = randomShader + colorShader + baseFragmentShader;
+
     await addShaderOverlay(environment, 
         {
             tDiffuse: { value: null }, // tDiffuse is the texture of the rendered scene
             time: { value: .0 },
             alpha: { value: 0.717955252861182 },
             gray: { value: 0.6260300163584603 },
-            scale: {value: 2.1230881684358494},
-            sliderColor: {
+            scale: { value: 2.1230881684358494 },
+            RGB1931_slider_color: {
                 type: "3f",
                 value: new THREE.Vector3(0., 0., 0.)
             },
-            matchColor: {
+            XYZ_target_color: {
                 type: "3f",
                 value: new THREE.Vector3(0., 0., 0.)
-            }
+            },
+            realistic: { value: 1. }
         },
-        'shaders/colorMatching/vertex.glsl',
-        'shaders/colorMatching/fragment.glsl');
-    environment.matchColor = {
-        type: "3f",
-        value: new THREE.Vector3(0., 0., 0.)
-    };
+        vertexShader,
+        fragmentShader);
 }
 
 function drawAxis() {
@@ -178,18 +193,16 @@ async function initializeVisualSpectrum(environment, canvasName, divName) {
     const spectra = loadTexturesFromArray(await loadVisualSpectrumArray(getPath('lin2012xyz2e_fine_7sf.csv')));
     //const spectra = await loadVisualSpectrum2(getPath('lin2012xyz2e_fine_7sf.csv'));
 
-     // Get shaders
-     const colorShader = await loadShader('shaders/colors.glsl');
-     const randomShader = await loadShader('shaders/random.glsl');
-     const placementShader = await loadShader('shaders/complementCloud/placement.glsl');
-     const baseVertexShader = await loadShader('shaders/visualSpectrum/vertex.glsl');
-     const baseSpectrumVertexShader = await loadShader('shaders/complementCloud/spectrumVertex.glsl');
-     const baseFragmentShader = await loadShader('shaders/visualSpectrum/fragment.glsl');
+    // Get shaders
+    const colorShader = await loadShader('shaders/colors.glsl');
+    const randomShader = await loadShader('shaders/random.glsl');
+    const baseVertexShader = await loadShader('shaders/visualSpectrum/vertex.glsl');
+    const baseFragmentShader = await loadShader('shaders/visualSpectrum/fragment.glsl');
 
-     const vertexShader = baseVertexShader;
-     const fragmentShader = randomShader + colorShader + baseFragmentShader;
+    const vertexShader = baseVertexShader;
+    const fragmentShader = randomShader + colorShader + baseFragmentShader;
 
-    await addShaderOverlay2(environment, 
+    await addShaderOverlay(environment, 
         {
             tDiffuse: { value: null }, // tDiffuse is the texture of the rendered scene
             time: { value: .0 },
@@ -224,7 +237,7 @@ async function initObjects() {
     await initializeColorMatching(environments.colorMatching,'colorMatching','colorMatchingDiv');
     initializeSliders('#sliders', 0.717955252861182, 0.6260300163584603,
         environments.complementCloud,
-        environments.colorMatching.composer.passes[1].uniforms.sliderColor.value
+        environments.colorMatching.composer.passes[1].uniforms.RGB1931_slider_color.value
         );
     setUpMatching(environments.visualSpectrum.spectrum, 'visualSpectrum', environments.colorMatching, environments.complementCloud);
 
