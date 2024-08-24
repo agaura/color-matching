@@ -91,6 +91,7 @@ canvas {
 
 button {
     margin: 0 10px;
+    touch-action: manipulation;
 }
 
 .track,
