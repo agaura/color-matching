@@ -1,7 +1,30 @@
 import * as THREE from 'three';
 import { lookupTable } from './coordinates.js';
-import { loadShader, createPointCube, loadVisualSpectrumArray, loadTextureFromArray, loadTexturesFromArray, getPath, calibrateCanvas } from './utils.js';
+import { loadShader, loadVisualSpectrumArray, loadTextureFromArray, loadTexturesFromArray, getPath, calibrateCanvas } from './utils.js';
 import { Motion } from './motion.js';
+
+function createPointCube(scale) {
+    const positions = [];
+
+    const cube_height = scale;
+    const cube_width = scale;
+    const cube_depth = scale;
+
+    for (let i = 0; i < cube_height; i++){
+        for (let j = 0; j < cube_width; j++) {
+            for (let k = 0; k < cube_depth; k++) {
+                
+                const x = scale * Math.random() / (cube_height);
+                const y = scale * Math.random() / (cube_width);
+                const z = scale * Math.random() / (cube_depth);
+
+                positions.push(x, y, z);
+            }
+        }
+    }
+
+    return positions;
+}
 
 export class ComplementCloud {
     scale = null;
@@ -76,14 +99,19 @@ export class ComplementCloud {
     }
 
     render(time) {
-        this.outerCloud.material.uniforms.time.value = time;
-        this.P3Cloud.material.uniforms.time.value = time;
-        this.sRGBCloud.material.uniforms.time.value = time;
-        this.spectrum.material.uniforms.time.value = time;
 
-        this.motion.selfMove();
+        // only render if there is something to render
+        if (this.outerCloud) {
+            
+            this.outerCloud.material.uniforms.time.value = time;
+            this.P3Cloud.material.uniforms.time.value = time;
+            this.sRGBCloud.material.uniforms.time.value = time;
+            this.spectrum.material.uniforms.time.value = time;
 
-        this.renderer.render(this.scene, this.camera);
+            this.motion.selfMove();
+
+            this.renderer.render(this.scene, this.camera);
+        }
     }
 
     createShaderMaterial(vertexShader, fragmentShader, cloudID) {

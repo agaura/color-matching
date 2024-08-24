@@ -107,6 +107,7 @@ float spread2(float x, float a, float b) {
 
 vec3 push_into_displayable_XYZ_cloud2(sampler2D x, sampler2D y, sampler2D z, vec3 distribution, float width) {
 
+    // this is just to prevent the bowtie pattern in the chromaticity diagram
     float redistribution = distribution.x * 2.0;
     float a1 = 0.002*2.;
     float a2 = 0.137*2.;
