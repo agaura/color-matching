@@ -52,7 +52,7 @@ export class ColorMatching {
     composer = null;
     ready = null; // this is actually a promise (?) thingy
 
-    constructor(canvasName, divName) {
+    constructor(canvasName) {
 
         // Add canvas
         this.canvas = document.getElementById(canvasName);
@@ -75,7 +75,7 @@ export class ColorMatching {
 
         this.ready = this.addObjects();
 
-        this.enableResize(document.getElementById(divName)); // Redraw the axis on window resize
+        this.calibrateResize(); // Redraw the axis on window resize
         
     }
 
@@ -112,13 +112,14 @@ export class ColorMatching {
     }
 
     // TODO: I might be able to fix this so that the canvas doesn't need to overly a container, and just have the canvas do everything on its own in CSS
-    enableResize(container) {    
+    calibrateResize() {    
 
-        // Resize
-        calibrateCanvas(this.canvas, this.renderer, container);
+        var rect = this.canvas.parentElement.getBoundingClientRect();
+        this.renderer.setSize(rect.width, rect.height);
 
         window.addEventListener('resize', () => {
-            calibrateCanvas(this.canvas, this.renderer, container);
+            var rect = this.canvas.parentElement.getBoundingClientRect();
+            this.renderer.setSize(rect.width, rect.height);
         });
 
     }
@@ -166,8 +167,8 @@ export class ColorMatching {
         // display as the target color whatever color is being hovered over
         canvas.addEventListener('mousemove', function(event) {
         const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const proportion = x / canvas.width;
+        const x = event.clientX - Math.floor(rect.left);
+        const proportion = x / (Math.ceil(rect.right) - Math.floor(rect.left));
         const i = 4 * Math.round(proportion * (spectrum.image.data.length/4 - 1));
 
         XYZdisplayTargetColor.set(

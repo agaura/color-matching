@@ -38,20 +38,52 @@
                 </div>
                 <div id="bottom-left">
                     <div id="chart-container">
-                        <div id="blank-chart"></div>
+                        <div id="blank-chart">
+                            <canvas id="visualSpectrum" style="cursor: pointer;"></canvas>
+                        </div>
                         <svg id="axis-svg"></svg>
                     </div>
                     <div id="colorMatchingContainer">
-                        <div id="colorMatchingDiv"></div>
+                        <div id="colorMatchingDiv">
+                            <canvas id="colorMatching"></canvas>
+                        </div>
                     </div>
                     <div id="sliders"></div>
                     <div id="matchBtnDiv">
                         <button id="matchBtn">Confirm Match</button>
                     </div>
+                    <!--- <div id="keyDiv">
+                        <div class="grid-letter" id="gridA">
+                            <canvas class="tile" style="background-color: white;"></canvas>
+                            <canvas class="tile" style="background-color: red;"></canvas>
+                            <canvas class="tile" style="background-color: green;"></canvas>
+                            <canvas class="tile" style="background-color: blue;"></canvas>
+                            <canvas class="tile" style="background-color: black;"></canvas>
+                            <canvas class="tile" style="background-color: gray;"></canvas>
+                            <canvas class="tile" style="background-color: gray;"></canvas>
+                            <canvas class="tile" style="background-color: gray;"></canvas>
+                            <canvas class="tile" style="background-color: gray;"></canvas>
+                        </div>
+                        <span> → </span>
+                        <div class="grid-letter" id="gridB">
+                            <canvas class="tile" style="background-color: white;"></canvas>
+                            <canvas class="tile" style="background-color: red;"></canvas>
+                            <canvas class="tile" style="background-color: green;"></canvas>
+                            <canvas class="tile" style="background-color: blue;"></canvas>
+                            <canvas class="tile" style="background-color: black;"></canvas>
+                            <canvas class="tile" style="background-color: gray;"></canvas>
+                            <canvas class="tile" style="background-color: gray;"></canvas>
+                            <canvas class="tile" style="background-color: gray;"></canvas>
+                            <canvas class="tile" style="background-color: gray;"></canvas>
+                        </div>
+                    </div>
+                    /--->
                 </div>
             </div>
             <div id="right-column">
-                <div id="complementCloudDiv"></div>
+                <div id="complementCloudDiv">
+                    <canvas id="complementCloud" style="cursor: pointer;"></canvas>
+                </div>
             </div>
         </div>
         <div id="bottom-div">
@@ -61,9 +93,6 @@
             </div>
         </div>
     </div>
-    <canvas id="complementCloud" style="cursor: pointer;"></canvas>
-    <canvas id="colorMatching"></canvas>
-    <canvas id="visualSpectrum" style="cursor: pointer;"></canvas>
     <!-- <video width = "10" height = "10" poster="white.b07b762e.png" preload autoplay loop muted controls class="h-1 w-full" title="HDR Video" id="hdr-video"> -->
     <!-- <video poster="white.b07b762e.png" preload autoplay loop muted controls class="h-1 w-full" title="HDR Video" id="hdr-video">
         <source src="https://kidi.ng/wanna-see-a-whiter-white/white1.6805bac8.webm" type="video/webm">

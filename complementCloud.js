@@ -55,7 +55,7 @@ export class ComplementCloud {
 
         this.ready = this.addObjects();
 
-        this.enableResize(document.getElementById(divName));
+        this.calibrateResize(document.getElementById(divName));
     }
 
     setIdealX(val) {
@@ -221,12 +221,15 @@ export class ComplementCloud {
         this.renderer.outputColorSpace = THREE.DisplayP3ColorSpace
     }
 
-    // TODO: I might be able to fix this so that the canvas doesn't need to overly a container, and just have the canvas do everything on its own in CSS
-    enableResize(container) {
-        calibrateCanvas(this.canvas, this.renderer, container);
+    calibrateResize() {
+
+        var rect = this.canvas.parentElement.getBoundingClientRect();
+        this.renderer.setSize(rect.width, rect.height);
     
         window.addEventListener('resize', () => {
-            calibrateCanvas(this.canvas, this.renderer, container);
+
+            var rect = this.canvas.parentElement.getBoundingClientRect();
+            this.renderer.setSize(rect.width, rect.height);
 
             // note, there are 3603/3 points in the complement spectral band, and 9600/3 in the regular one
             let drawCount = this.scale * this.scale * this.scale * (Math.pow(this.canvas.width/screen.width * 2 * screen.width/1920,2));

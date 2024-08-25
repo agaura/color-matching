@@ -22,10 +22,10 @@ async function initObjects() {
     environments.complementCloud = new ComplementCloud('complementCloud', 'complementCloudDiv', 50);
     await environments.complementCloud.ready;
 
-    environments.visualSpectrum = new VisualSpectrum('visualSpectrum', 'blank-chart');
+    environments.visualSpectrum = new VisualSpectrum('visualSpectrum');
     await environments.visualSpectrum.ready;
 
-    environments.colorMatching = new ColorMatching('colorMatching', 'colorMatchingDiv');
+    environments.colorMatching = new ColorMatching('colorMatching');
     await environments.colorMatching.ready;
 
     initializeSliders('#sliders', 0.717955252861182, 0.6260300163584603,

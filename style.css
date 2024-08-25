@@ -50,6 +50,16 @@ body, html {
     width: min(50vw, 95vh);
     height: min(50vw, 95vh);
     aspect-ratio: 1 / 1;
+    position: relative;
+}
+
+#complementCloud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 #top-left {
@@ -116,7 +126,17 @@ button {
     /*margin-right: 8%; /* Adjust the right margin as needed */
     margin-top: 10px;
     margin-bottom: 10px;
+    position: relative;
     /*width: calc(100% - 20%); /* Adjust based on total left and right margins */
+}
+
+#colorMatching {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 #colorMatchingDiv {
@@ -140,6 +160,16 @@ button {
     padding-top: 12.5%; /* Establish an 8:1 aspect ratio */
     margin-left: auto; /* Centers the div within chart-container */
     margin-right: auto; /* Centers the div within chart-container */
+    position: relative; /* Required for positioning the canvas */
+}
+
+#visualSpectrum {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 #axis-svg {
@@ -161,4 +191,77 @@ button {
     overflow: hidden;
     pointer-events: none; /* Disables mouse interactions */
     filter: opacity(100%);
+}
+
+/* Container to center the phrase "A → B" */
+#keyDiv {
+    padding-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Full viewport height */
+    text-align: center;
+}
+
+/* Grid to replace letters "A" and "B" */
+.grid-letter {
+    display: grid;
+    grid-template-columns: repeat(3, 10px);
+    grid-template-rows: repeat(3, 10px);
+    gap: 0; /* No gap between canvases */
+    margin: 0 10px; /* Space between the grid and the arrow */
+    position: relative; /* Needed to position the canvases properly */
+}
+
+/* Canvas tiles (positioned to skip the corners) */
+.tile:nth-child(1) {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.tile:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.tile:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.tile:nth-child(4) {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.tile:nth-child(5) {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.tile:nth-child(6) {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.tile:nth-child(7) {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.tile:nth-child(8) {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.tile:nth-child(9) {
+    grid-column: 3;
+    grid-row: 3;
+}
+
+
+.tile {
+    width: 10px;
+    height: 10px;
+    display: block;
 }

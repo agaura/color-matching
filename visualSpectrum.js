@@ -11,7 +11,7 @@ export class VisualSpectrum {
     spectrum = null;
     ready = null; // this is actually a promise (?) thingy
 
-    constructor(canvasName, divName) {
+    constructor(canvasName) {
 
         // Add canvas
         this.canvas = document.getElementById(canvasName);
@@ -35,7 +35,7 @@ export class VisualSpectrum {
         this.ready = this.addObjects();
 
         this.drawAxis(); // Add axis
-        this.enableResize(document.getElementById(divName)); // Redraw the axis on window resize
+        this.calibrateResize(); // Redraw the axis on window resize
         
     }
 
@@ -91,13 +91,16 @@ export class VisualSpectrum {
     }
 
     // TODO: I might be able to fix this so that the canvas doesn't need to overly a container, and just have the canvas do everything on its own in CSS
-    enableResize(container) {    
+    calibrateResize() {    
 
-        // Resize
-        calibrateCanvas(this.canvas, this.renderer, container);
+        var rect = this.canvas.parentElement.getBoundingClientRect();
+        this.renderer.setSize(rect.width, rect.height);
 
         window.addEventListener('resize', () => {
-            calibrateCanvas(this.canvas, this.renderer, container);
+            
+            var rect = this.canvas.parentElement.getBoundingClientRect();
+            this.renderer.setSize(rect.width, rect.height);
+
             this.drawAxis();
         }); // Redraw the axis on window resize
 
