@@ -49,7 +49,8 @@ export class ComplementCloud {
         this.initializeCamera();
         this.initializeRenderer();
 
-        this.scale = sideLength * Math.pow(Math.max(screen.width, screen.height)/1920,1/8);
+        //this.scale = sideLength * Math.pow(Math.max(screen.width, screen.height)/1920,1/8);
+        this.scale = sideLength * Math.pow(Math.max(screen.width, screen.height)/1920,2/3);
         this.scene = new THREE.Scene();
         //this.addObjects();
 
@@ -190,8 +191,12 @@ export class ComplementCloud {
         this.scene.add(this.object);
         
         // Select which points should be drawn
+        var rect = this.canvas.parentElement.getBoundingClientRect();
+
         this.matchesDrawn = 0;
-        let drawCount = this.scale * this.scale * this.scale * (Math.pow(this.canvas.width/screen.width * 2 * screen.width/1920,2));
+        //let drawCount = this.scale * this.scale * this.scale * (Math.pow(this.canvas.width/screen.width * 2 * screen.width/1920,2));
+        let ratio = (2 * rect.width) / Math.max(screen.width, screen.height); // this is the scale of the canvas with respect to its maximum
+        let drawCount = Math.pow(this.scale, 3) * Math.pow(ratio, 2);
         this.outerCloud.geometry.setDrawRange(0, drawCount );
         this.P3Cloud.geometry.setDrawRange(0, drawCount );
         this.sRGBCloud.geometry.setDrawRange(0, drawCount );
@@ -232,7 +237,9 @@ export class ComplementCloud {
             this.renderer.setSize(rect.width, rect.height);
 
             // note, there are 3603/3 points in the complement spectral band, and 9600/3 in the regular one
-            let drawCount = this.scale * this.scale * this.scale * (Math.pow(this.canvas.width/screen.width * 2 * screen.width/1920,2));
+            //let drawCount = this.scale * this.scale * this.scale * (Math.pow(this.canvas.width/screen.width * 2 * screen.width/1920,2));
+            let ratio = (2 * rect.width) / Math.max(screen.width, screen.height); // this is the scale of the canvas with respect to its maximum
+            let drawCount = Math.pow(this.scale, 3) * Math.pow(ratio, 2);
             this.outerCloud.geometry.setDrawRange(0, drawCount);
             this.P3Cloud.geometry.setDrawRange(0, drawCount);
             this.sRGBCloud.geometry.setDrawRange(0, drawCount);
