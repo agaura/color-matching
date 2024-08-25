@@ -47,6 +47,11 @@ body, html {
     overflow: hidden;
 }
 
+#complementCloudDiv {
+    width: min(50dvw, 95dvh);
+    height: min(50dvw, 95dvh);
+    position: relative;
+}
 
 /* Media query for when the screen's width is smaller than its height */
 @media (max-aspect-ratio: 0.95/1) {
@@ -58,14 +63,11 @@ body, html {
         width: 100%;
         height: 50%;
     }
-}
 
-#complementCloudDiv {
-    /* Use the min() function to select the smaller value between the viewport width and height */
-    width: min(50vw, 95vh);
-    height: min(50vw, 95vh);
-    aspect-ratio: 1 / 1;
-    position: relative;
+    #complementCloudDiv {
+        width: min(100dvw, 47.5dvh);
+        height: min(100dvw, 47.5dvh);
+    }
 }
 
 #complementCloud {
