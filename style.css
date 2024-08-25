@@ -34,6 +34,8 @@ body, html {
     flex-direction: column;
     width: 50%; /* Adjust if you want different column widths */
     flex-grow: 2;
+    height: 100%;
+    overflow-y: auto; /* Make the right column scrollable if content exceeds height */
 }
 
 #right-column {
@@ -43,6 +45,19 @@ body, html {
     width: 50%;
     height: 100%;
     overflow: hidden;
+}
+
+
+/* Media query for when the screen's width is smaller than its height */
+@media (max-aspect-ratio: 0.95/1) {
+    #top-area {
+        flex-direction: column;
+    }
+
+    #left-column, #right-column {
+        width: 100%;
+        height: 50%;
+    }
 }
 
 #complementCloudDiv {
