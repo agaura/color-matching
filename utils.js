@@ -61,12 +61,12 @@ export async function loadShader(url) {
     return response.text();
 }
 
-export async function loadVisualSpectrumArray(csvFile) {
+export async function loadVisualSpectrumArray(csvFile, start, end) {
     let array = [];
 
     // Await the asynchronous loading and processing of the CSV file
     const data = await d3.csv(csvFile);
-    let modifiedData = data.slice(0, 3200); // 390.0 to 709.9
+    let modifiedData = data.slice(start, end); // 390.0 to 709.9
     modifiedData.forEach((row) => {
         array.push(parseFloat(row.X), parseFloat(row.Y), parseFloat(row.Z));
     });

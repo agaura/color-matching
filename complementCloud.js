@@ -80,7 +80,7 @@ export class ComplementCloud {
     async fillSpectrum() {
 
         this.matchesDrawn = 9600/3;
-        let spectralData = loadTextureFromArray(await loadVisualSpectrumArray(getPath('lin2012xyz2e_fine_7sf.csv')));
+        let spectralData = loadTextureFromArray(await loadVisualSpectrumArray(getPath('cie1931xyz2e.csv'), 0, 350));
         this.spectrum.geometry.attributes.position.needsUpdate = true;
         let spectrum = spectralData;
     

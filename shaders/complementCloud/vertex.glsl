@@ -41,7 +41,7 @@ void place_complement_cloud() {
     // else put it in the general portion of the cloud;
     else {
         //xyz_color = push_into_displayable_XYZ_cloud(spectrumLookup, cubic_cloud_distribute2(position, time));
-        xyz_color = push_into_displayable_XYZ_cloud2(spectrumLookupX, spectrumLookupY, spectrumLookupZ, cubic_cloud_distribute2(position, time), 1201.);
+        xyz_color = push_into_displayable_XYZ_cloud2(spectrumLookupX, spectrumLookupY, spectrumLookupZ, cubic_cloud_distribute2(position, time), 963.);
 
         //gl_PointSize = 2.*(sin(time/250.)/2.+0.5);
     }
@@ -89,9 +89,9 @@ void place_RGB1931_cloud() {
     //if (cloudID != 0) {new_position *= 0.;}
 
     new_position = cubic_cloud_distribute(new_position, time);
-    new_position = vec3(rebound(new_position.x, -0.493152501716165, 2.1230881684358494),
-        rebound(new_position.y, 0.0, 1.2081507310237678),
-        rebound(new_position.z, 0.0, 1.9537069391779407)) / 2.1230881684358494;
+    new_position = vec3(rebound(new_position.x, -0.493152501716165, 1.965183286767108),
+        rebound(new_position.y, -0.00805191440272286 , 1.216076153552706),
+        rebound(new_position.z, -0.007807945437758209, 1.8007307567680726)) / 1.965183286767108;
 
     //new_position = new_position + 1000.*vec3(0.,0.,position.z);
     //new_position.y = mod(new_position.y + position.y * 1000., 1.);

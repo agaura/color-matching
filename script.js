@@ -28,7 +28,7 @@ async function initObjects() {
     environments.colorMatching = new ColorMatching('colorMatching');
     await environments.colorMatching.ready;
 
-    initializeSliders('#sliders', 0.717955252861182, 0.6260300163584603,
+    initializeSliders('#sliders', 0.697737144559289, 0.6602703073367381,
         environments.complementCloud,
         environments.colorMatching.composer.passes[1].uniforms.RGB1931_slider_color.value
         );

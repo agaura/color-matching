@@ -109,8 +109,8 @@ vec3 push_into_displayable_XYZ_cloud2(sampler2D x, sampler2D y, sampler2D z, vec
 
     // this is just to prevent the bowtie pattern in the chromaticity diagram
     float redistribution = distribution.x * 2.0;
-    float a1 = 0.002*2.;
-    float a2 = 0.137*2.;
+    float a1 = 0.001*2.;
+    float a2 = 0.143*2.;
     float addit = floor(redistribution);
     redistribution = redistribution - addit;
     redistribution = adjustDensity(redistribution, a1, a2, 0.675) + addit;

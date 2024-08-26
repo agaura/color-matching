@@ -94,8 +94,8 @@ export class ColorMatching {
             {
                 tDiffuse: { value: null }, // tDiffuse is the texture of the rendered scene
                 time: { value: .0 },
-                alpha: { value: 0.717955252861182 },
-                gray: { value: 0.6260300163584603 },
+                alpha: { value: 0.697737144559289 }, //alpha: { value: 0.717955252861182 },
+                gray: { value: 0.6602703073367381 }, //gray: { value: 0.6260300163584603 },
                 scale: { value: 2.1230881684358494 },
                 RGB1931_slider_color: {
                     type: "3f",

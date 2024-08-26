@@ -8,8 +8,10 @@ void paint_complement_cloud() {
 
     vec3 p3_color = XYZ_to_p3*xyz_color;
     float whitepoint_scale = 0.916;
-    float alpha = 0.38465664131947086;
-    vec3 gray = vec3(0.3277935806611292);
+    //float alpha = 0.38465664131947086;
+    //vec3 gray = vec3(0.3277935806611292);
+    float alpha = 0.3392828462996986;
+    vec3 gray = vec3(0.4587381755096547);
 
     vec3 linearResult = mix(gray, p3_color, alpha);
     vec3 real_p3 = p3_color/whitepoint_scale;

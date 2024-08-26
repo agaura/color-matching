@@ -8,7 +8,7 @@ function initializeSlider(svg, height, min, max, widthAdj, heightAdj, primary, a
             .min(min)
             .max(max)
             .step(0.01)
-            .ticks(4)
+            .ticks(4.1)
             .tickFormat(d3.format('.1f'))
             .default(0.)
             .fill(displayableProjection(0, primary, a, g))
@@ -55,13 +55,22 @@ export function initializeSliders(divName, a, g, vec1, vec2) {
         .attr('width', 230)
         .attr('height', 140);
     
+    /*
     const redMax = 2.1230881684358494 / 2.1230881684358494;
     const redMin = -0.493152501716165 / 2.1230881684358494;
     const greenMax = 1.2081507310237678 / 2.1230881684358494;
     const greenMin = 0.00000009820589517473569 / 2.1230881684358494;
     const blueMax = 1.9537069391779407 / 2.1230881684358494;
     const blueMin = -0.009772809704916124 / 2.1230881684358494;
-    
+    */
+
+    const redMax = 1.965183286767108 / 1.965183286767108;
+    const redMin = -0.5310405939468191 / 1.965183286767108;
+    const greenMax = 1.216076153552706 / 1.965183286767108;
+    const greenMin = -0.00805191440272286 / 1.965183286767108;
+    const blueMax = 1.8007307567680726 / 1.965183286767108;
+    const blueMin = -0.007807945437758209 / 1.965183286767108;
+
     const maxHeight = 100;
     const redHeight = maxHeight;
     const greenHeight = maxHeight * (greenMax - greenMin) / (redMax - redMin);
