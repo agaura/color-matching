@@ -12,7 +12,7 @@ varying vec2 vUv;
 void main() {
 
     // derive linear P3 values of the spectrum prior to being projected on a background
-    vec3 XYZ_spectral_color = linearFilterPackedTexture(spectrumX, spectrumY, spectrumZ, vUv, 3200.); // have this 3200 as a uniform later
+    vec3 XYZ_spectral_color = linearFilterPackedTexture(spectrumX, spectrumY, spectrumZ, vUv, 320.); // have this 320 as a uniform later
     vec3 XYZ_dimmed_color = XYZ_spectral_color / dimmingFactor; // spectral colors far exceed displayable range, need to be dimmed to compensate
     vec3 P3_Linear_ideal_color = XYZ_to_p3 * XYZ_dimmed_color;
 

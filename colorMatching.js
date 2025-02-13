@@ -9,7 +9,7 @@ function checkMatch(spectrum, matchEnvironment, cloudEnvironment) {
     
     const XYZdefaultTargetColor = matchEnvironment.targetColor.value;
     const XYZdisplayTargetColor = matchEnvironment.composer.passes[1].uniforms.XYZ_target_color.value;
-    const RGB1931displayTargetColor = XYZdisplayTargetColor.clone().applyMatrix3(XYZtoRGB1931).divideScalar(2.1230881684358494);
+    const RGB1931displayTargetColor = XYZdisplayTargetColor.clone().applyMatrix3(XYZtoRGB1931).divideScalar(1.965183286767108);
     const RGB1931sliderColor = matchEnvironment.composer.passes[1].uniforms.RGB1931_slider_color.value;
 
     if (RGB1931displayTargetColor.distanceTo(RGB1931sliderColor) < 0.1) {
@@ -96,7 +96,7 @@ export class ColorMatching {
                 time: { value: .0 },
                 alpha: { value: 0.697737144559289 }, //alpha: { value: 0.717955252861182 },
                 gray: { value: 0.6602703073367381 }, //gray: { value: 0.6260300163584603 },
-                scale: { value: 2.1230881684358494 },
+                scale: { value: 1.965183286767108 }, //scale: { value: 2.1230881684358494 },
                 RGB1931_slider_color: {
                     type: "3f",
                     value: new THREE.Vector3(0., 0., 0.)
@@ -128,7 +128,7 @@ export class ColorMatching {
     
         const XYZdefaultTargetColor = matchEnvironment.targetColor.value;
         const XYZdisplayTargetColor = matchEnvironment.composer.passes[1].uniforms.XYZ_target_color.value;
-        const RGB1931displayTargetColor = XYZdisplayTargetColor.clone().applyMatrix3(XYZtoRGB1931).divideScalar(2.1230881684358494);
+        const RGB1931displayTargetColor = XYZdisplayTargetColor.clone().applyMatrix3(XYZtoRGB1931).divideScalar(1.965183286767108);
         const RGB1931sliderColor = matchEnvironment.composer.passes[1].uniforms.RGB1931_slider_color.value;
     
         if (RGB1931displayTargetColor.distanceTo(RGB1931sliderColor) < 0.1) {

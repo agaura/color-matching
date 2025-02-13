@@ -59,7 +59,7 @@ export class VisualSpectrum {
                 time: { value: .0 },
                 alpha: { value: 0.697737144559289 }, //alpha: { value: 0.717955252861182 }, // 0.7715569276056665 for greatest diversity
                 gray: { value: 0.6602703073367381 }, //gray: { value: 0.6260300163584603 }, // 0.8015956245904453 for greatest diversity
-                dimmingFactor: {value: 2.1230881684358494},
+                dimmingFactor: {value: 1.965183286767108}, //dimmingFactor: { value: 2.1230881684358494 },
                 spectrumX: {value: spectra.X},
                 spectrumY: {value: spectra.Y},
                 spectrumZ: {value: spectra.Z}

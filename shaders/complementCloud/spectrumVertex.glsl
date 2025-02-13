@@ -10,7 +10,7 @@ void place_complement_cloud() {
     xyz_color = position;
     //xyz_color = vec3(0.0); // to essentially remove the belt
     gl_PointSize = 5.*(sin(time/1000.) + 1.) + 1.;
-    gl_PointSize = 1.;
+    gl_PointSize = 5.;
 
     xyz_color /= 2.1230881684358494;
 
@@ -25,7 +25,7 @@ void place_RGB1931_cloud() {
     vec3 new_position = position;
 
     //new_position *= 1.*(sin(time/1345.*2. + 100.*stable_randomizer(new_position))/2. + 0.5);
-    new_position /= 2.1230881684358494;
+    new_position /= 1.965183286767108;
     //new_position = new_position/length(XYZ_to_RGB1931*new_position) * 0.4*(sin(time/1345.*2. + 100.*stable_randomizer(new_position))/2. + 0.5);
     //new_position = new_position/dot(XYZ_to_RGB1931*new_position, vec3(1.)) * 0.4*(sin(time/1345.*2. + 100.*stable_randomizer(new_position))/2. + 0.5);
     xyz_color = new_position;
@@ -42,6 +42,7 @@ void place_RGB1931_cloud() {
 
 }
 
+// I don't think this is doing anything right now
 void full_spectrum() {
 
     vec3 new_position = position;

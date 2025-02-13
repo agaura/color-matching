@@ -45,6 +45,7 @@ void paint_RGB1931_cloud() {
     if (!bool(unaffected)) {
         vec3 alphas = oldGetAlphas(XYZ_to_RGB1931*xyz_color, ideal);
         //vec3 alphas = getAlphas(XYZ_to_RGB1931*xyz_color, ideal);
+        //alphas = mix(alphas, vec3(1.0), pow((sin(time/750.) + 1.)/2.,4.));
         vec3 rgb1931DisplayableBlack = XYZ_to_RGB1931*p3_to_XYZ*mix(gray, vec3(0.), alpha);
         vec3 rgb1931FullyHighlightedColor = XYZ_to_RGB1931*p3_to_XYZ*fullyHighlightedColor;
         linearResult = XYZ_to_p3*RGB1931_to_XYZ*mix(rgb1931DisplayableBlack, rgb1931FullyHighlightedColor, alphas);

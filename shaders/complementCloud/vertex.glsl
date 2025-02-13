@@ -89,7 +89,7 @@ void place_RGB1931_cloud() {
     //if (cloudID != 0) {new_position *= 0.;}
 
     new_position = cubic_cloud_distribute(new_position, time);
-    new_position = vec3(rebound(new_position.x, -0.493152501716165, 1.965183286767108),
+    new_position = vec3(rebound(new_position.x, -0.5310405939468191, 1.965183286767108),
         rebound(new_position.y, -0.00805191440272286 , 1.216076153552706),
         rebound(new_position.z, -0.007807945437758209, 1.8007307567680726)) / 1.965183286767108;
 
@@ -106,7 +106,7 @@ void place_RGB1931_cloud() {
 
     unaffected = float(false);
 
-    vec4 correctedPosition = vec4(properly_position(new_position,1.), 1.0);
+    vec4 correctedPosition = vec4(properly_position(new_position,.95), 1.0);
     //vec4 correctedPosition = vec4(properly_position_matching(new_position,1.), 1.0);
     gl_Position = projectionMatrix * modelViewMatrix * correctedPosition;
 
